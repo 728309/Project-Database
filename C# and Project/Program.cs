@@ -14,7 +14,7 @@ namespace C__and_Project
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Home/zero");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -34,3 +34,5 @@ namespace C__and_Project
         }
     }
 }
+
+//help me plase
