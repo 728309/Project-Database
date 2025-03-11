@@ -4,29 +4,106 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace C__and_Project.Controllers
 {
-    public class HomeController : Controller
+    public class UsersController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IUsersRepository _usersRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public UsersController(IUsersRepository usersRepository)
         {
-            _logger = logger;
+            _usersRepository = usersRepository;
         }
 
         public IActionResult Index()
         {
-            return View();
+            List<User> users = _usersRepository.GetAllUsers();
+            return View(users);
         }
 
-        public IActionResult Privacy()
+        [HttpGet]
+        public IActionResult Create()
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpPost]
+        public IActionResult Create(User user)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            try
+            {
+                //add users via repository
+                _usersRepository.AddUser(user);
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return View(user);
+            }
+        }
+
+        //Get user
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            if (id is null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                //get user via repository
+                User? user = _usersRepository.GetUserByID((int)id);
+                return View(user);
+            }
+        }
+
+        public IActionResult Delete(User user)
+        {
+            try
+            {
+                //delete user via repository
+                _usersRepository.DeleteUser(user);
+
+                //go back to user list(via Index)
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                //something went wrong, go back to view with user
+                return View(user);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+
+            if (id is null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                //get user via repository
+                User? user = _usersRepository.GetUserByID((int)id);
+                return View(user);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Edit(User user)
+        {
+            try
+            {
+                //add users via repository
+                _usersRepository.UpdateUser(user);
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return View(user);
+            }
         }
     }
 }
