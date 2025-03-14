@@ -2,7 +2,7 @@
 
 namespace C__and_Project.Repositories
 {
-    public class DummyUserRepository : IUsersRepository
+    public class DummyUsersRepository : IUsersRepository
     {
         //static to enable persisting of list
         //Ideally this should be done in a SEEDMETHOD!
