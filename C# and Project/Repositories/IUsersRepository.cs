@@ -2,7 +2,7 @@
 
 namespace C__and_Project.Repositories
 {
-    public class IUsersRepository
+    public interface IUsersRepository
     {
         List<User> GetAllUsers();
         User? GetUserByID(int userId);
