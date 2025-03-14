@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.SqlClients;
+﻿using Microsoft.Data.SqlClient;
 using C__and_Project.Models;
 using System.Data;
 
@@ -10,7 +10,7 @@ namespace C__and_Project.Repositories
 
         public UsersRepository(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("SomerenDBConnection");
+            _connectionString = configuration.GetConnectionString("C#andProjectDatabase");
         }
 
         List<User> IUsersRepository.GetAllUsers()
@@ -34,7 +34,7 @@ namespace C__and_Project.Repositories
                                 UserID = Convert.ToInt32(reader["UserID"]),
                                 UserName = reader["UserName"].ToString(),
                                 MobileNumber = reader["MobileNumber"].ToString(),
-                                EmailAddress = reader["EmailAddress"].ToString()
+                                EmailAddress = reader["EmailAddress"].ToString() 
                             });
                         }
                     }
@@ -76,6 +76,7 @@ namespace C__and_Project.Repositories
                     command.Parameters.AddWithValue("@UserName", user.UserName);
                     command.Parameters.AddWithValue("@MobileNumber", user.MobileNumber);
                     command.Parameters.AddWithValue("@EmailAddress", user.EmailAddress);
+                    
 
                     //hash password in separate service before storing! 
                     // command.Parameters.AddWithValue("@Password", user.Password); 
