@@ -7,13 +7,12 @@ namespace C__and_Project.Repositories
         private static List<Room> rooms = new List<Room>
     {
         new Room(1, "Single", 1, 101),
-        new Room(2, "Dormitory", 2, 102)
-        
+        new Room(2, "Dormitory", 6, 102)
     };
 
         public List<Room> GetAllRooms()
         {
-            return rooms;
+            return rooms ?? new List<Room>();
         }
 
         public Room GetRoomById(int id)
