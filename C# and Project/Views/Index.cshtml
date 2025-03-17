@@ -1,0 +1,30 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model List<Room>
+
+<h2>Room List</h2>
+<table>
+    <tr>
+        <th>Room ID</th>
+        <th>Room Type</th>
+        <th>Capacity</th>
+        <th>Room Number</th>
+        <th>Actions</th>
+    </tr>
+    @foreach (var room in Model)
+    {
+        <tr>
+            <td>@room.RoomID</td>
+            <td>@room.RoomType</td>
+            <td>@room.Capacity</td>
+            <td>@room.RoomNumber</td>
+            <td>
+                <a href="@Url.Action("Details", "Room", new { id = room.RoomID })">Details</a>
+            </td>
+        </tr>
+    }
+</table>
+<a href="@Url.Action("Create", "Room")">Create New Room</a>
