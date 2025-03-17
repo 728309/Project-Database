@@ -1,0 +1,13 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Room
+
+<h2>Room Details</h2>
+<p>Room ID: @Model.RoomID</p>
+<p>Room Type: @Model.RoomType</p>
+<p>Capacity: @Model.Capacity</p>
+<p>Room Number: @Model.RoomNumber</p>
+<a href="@Url.Action("Index", "Room")">Back to List</a>
