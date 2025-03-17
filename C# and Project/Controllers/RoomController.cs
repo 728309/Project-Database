@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace C__and_Project.Controllers
 {
-    public class RoomController: Controller
+    public class RoomController : Controller
     {
         private readonly IRoomRepository _roomRepository;
 
@@ -43,4 +43,4 @@ namespace C__and_Project.Controllers
             return View(room);
         }
     }
-}
+ }
