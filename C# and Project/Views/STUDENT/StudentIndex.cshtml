@@ -1,0 +1,37 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "STUDENT";
+}
+
+<div class="text-center">
+    <h1 class="display-4">STUDENT</h1>
+    <p>Number of Students in te list: @Model.Count</p>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>StudentID</th>
+            <th>RoomID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (STUDENT student in Model)
+            {
+                <tr>
+                    <td>@student.StudentID</td>
+                    <td>@student.RoomID</td>
+                    <td>@student.FirstName</td>
+                    <td>@student.LastName</td>
+                    <td>@student.DateTime</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
