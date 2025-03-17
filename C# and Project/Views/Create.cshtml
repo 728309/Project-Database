@@ -8,7 +8,10 @@
 <h2>Create Room</h2>
 <form asp-action="Create">
     <label>Room Type</label>
-    <input type="text" asp-for="RoomType" required /><br />
+    <select asp-for="RoomType">
+        <option value="Single">Single</option>
+        <option value="Dormitory">Dormitory</option>
+    </select><br />
 
     <label>Capacity</label>
     <input type="number" asp-for="Capacity" required /><br />
