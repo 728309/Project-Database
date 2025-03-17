@@ -2,7 +2,7 @@
 
 namespace C__and_Project.Repositories
 {
-    public class RoomRepository
+    public class RoomRepository : IRoomRepository
     {
         private static List<Room> rooms = new List<Room>
     {
