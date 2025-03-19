@@ -5,8 +5,9 @@
 }
 @model List<Room>
 
-<h2>Room List</h2>
-<table border="1">
+<h1>Room List</h1>
+<table class="table" border="1">
+    <thead>
     <tr>
         <th>Room ID</th>
         <th>Room Type</th>
@@ -14,6 +15,8 @@
         <th>Room Number</th>
         <th>Actions</th>
     </tr>
+    </thead>
+    <tbody>
     @foreach (var room in Model)
     {
         <tr>
@@ -26,5 +29,6 @@
             </td>
         </tr>
     }
+    </tbody>
 </table>
 <a href="@Url.Action("Create", "Room")">Create New Room</a>
