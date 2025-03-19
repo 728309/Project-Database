@@ -26,6 +26,7 @@ namespace C__and_Project.Repositories
 
         public void AddRoom(Room room)
         {
+            room.RoomID = rooms.Max(r => r.RoomID) + 1;
             rooms.Add(room);
         }
     }
