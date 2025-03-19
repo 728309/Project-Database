@@ -24,10 +24,35 @@ namespace C__and_Project.Repositories
             return rooms.FirstOrDefault(r => r.RoomID == id);
         }
 
-        public void AddRoom(Room room)
+        public void AddRoom(Room room)//check out
         {
             room.RoomID = rooms.Max(r => r.RoomID) + 1;
             rooms.Add(room);
         }
+
+        public void UpdateRoom(Room updatedRoom)//check out
+        {
+            var room = rooms.FirstOrDefault(r => r.RoomID == updatedRoom.RoomID);
+            if (room != null)
+            {
+                room.RoomType = updatedRoom.RoomType;
+                room.Capacity = updatedRoom.Capacity;
+                room.RoomNumber = updatedRoom.RoomNumber;
+            }
+
+        }
+        public void DeleteRoom(int id)//checkout
+        {
+            var room = rooms.FirstOrDefault(r => r.RoomID == id);
+            if (room != null)
+            {
+                rooms.Remove(room);
+            }
+        }
+
     }
+
+
 }
+
+
