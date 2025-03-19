@@ -6,8 +6,12 @@ namespace C__and_Project.Repositories
     {
         private static List<Room> rooms = new List<Room>
     {
-        new Room(1, "Single", 1, 101),
-        new Room(2, "Dormitory", 6, 102)
+       new Room(1, "Dormitory", 30, 101),
+        new Room(2, "Single", 25, 102),
+        new Room(3, "Dormitory", 40, 103),
+        new Room(4, "Single", 20, 104),
+        new Room(5, "Dormitory", 35, 105),
+        new Room(6, "Single", 50, 106)
     };
 
         public List<Room> GetAllRooms()
