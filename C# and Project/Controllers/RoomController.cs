@@ -42,5 +42,17 @@ namespace C__and_Project.Controllers
             }
             return View(room);
         }
+        [HttpGet]
+        public IActionResult Index(int? capacity)
+        {
+            var rooms = _roomRepository.GetAllRooms();
+
+            if (capacity.HasValue)
+            {
+                rooms = rooms.Where(r => r.Capacity == capacity.Value).ToList();
+            }
+
+            return View(rooms);
+        }
     }
  }
