@@ -1,6 +1,8 @@
-﻿namespace C__and_Project.Models
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace C__and_Project.Models
 {
-    public class STUDENT
+    public class Student
     {
         public int StudentID { get; set; }
         public int RoomID { get; set; }
@@ -8,12 +10,12 @@
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public STUDENT()
+        public Student()
         {
 
         }
 
-        public STUDENT(int studentID, int roomID, string dateTime,
+        public Student(int studentID, int roomID, string dateTime,
                     string firstname, string lastname)
         {
             StudentID = studentID;
