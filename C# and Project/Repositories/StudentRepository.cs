@@ -33,7 +33,7 @@ namespace C__and_Project.Repositories
                                 {
                                     StudentID = Convert.ToInt32(reader["StudentID"]),
                                     RoomID = Convert.ToInt32(reader["RoomID"]),
-                                   // DateTime = DateTime Now,
+                                    Date = Convert.ToDateTime(reader["DateTime"]),
                                     FirstName = reader["FirstName"].ToString(),
                                     LastName = reader["LastName"].ToString(),
                                 });
@@ -59,17 +59,32 @@ namespace C__and_Project.Repositories
 
         public void AddStudent(Student student)
         {
+            string checkquery = "SELECT COUNT(*) FROM Students WHERE StudentID = @StudentID";
+
             string query = "INSERT INTO Students (FirstName, LastName, DateTime, RoomID) " +
                            "VALUES (@FirstName, @LastName, @DateTIme, @RoomID);" +
                            "SELECT SCOPE_IDENTITY();";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
+                connection.Open();
+
+                using (SqlCommand Checkcommand = new SqlCommand(checkquery, connection))
+                {
+                    Checkcommand.Parameters.AddWithValue("@StudentID", student.StudentID);
+                    int count = (int)Checkcommand.ExecuteScalar();
+
+                    if (count > 0)
+                    {
+                        throw new Exception("A student with the same student number already exists.");
+                    }
+                }
+
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@FirstName", student.FirstName);
                     command.Parameters.AddWithValue("@LastName", student.LastName);
-                    command.Parameters.AddWithValue("@DateTime", student.DateTime);
+                    command.Parameters.AddWithValue("@DateTime", student.Date);
                     command.Parameters.AddWithValue("@RoomID", student.RoomID);
 
                     try
@@ -103,7 +118,7 @@ namespace C__and_Project.Repositories
                     command.Parameters.AddWithValue("@FirstName", student.FirstName);
                     command.Parameters.AddWithValue("@LastName", student.LastName);
                     command.Parameters.AddWithValue("@RoomID", student.RoomID);
-                    command.Parameters.AddWithValue("@DateTime", student.DateTime);
+                    command.Parameters.AddWithValue("@DateTime", student.Date);
 
                     connection.Open();
                     int rowsAffected = command.ExecuteNonQuery();
@@ -152,7 +167,7 @@ namespace C__and_Project.Repositories
                                 FirstName = reader["FirstName"].ToString(),
                                 LastName = reader["LastName"].ToString(),
                                 RoomID = Convert.ToInt32(reader["RoomID"]),
-                               // DateTime = Convert.(reader["DateTime"])
+                               Date = Convert.ToDateTime(reader["DateTime"])
                             };
                         }
                     }

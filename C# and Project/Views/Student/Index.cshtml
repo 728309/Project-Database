@@ -32,6 +32,7 @@
                 <td>@student.FirstName</td>
                 <td>@student.LastName</td>
                 <td>@student.RoomID</td>
+                <td>@student.Date.ToString("dd-MM-yyyy")</td>
                 <td>
                     <a href="@Url.Action("Edit", "Student", new { id = student.StudentID })" class="btn btn-primary btn-sm">Edit</a>
                     <a href="@Url.Action("Delete", "Student", new { id = student.StudentID })" class="btn btn-danger btn-sm">Delete</a>
