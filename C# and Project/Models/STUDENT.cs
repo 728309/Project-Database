@@ -6,7 +6,7 @@ namespace C__and_Project.Models
     {
         public int StudentID { get; set; }
         public int RoomID { get; set; }
-        public string DateTime { get; set; }
+        public DateTime Date { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
@@ -15,12 +15,12 @@ namespace C__and_Project.Models
 
         }
 
-        public Student(int studentID, int roomID, string dateTime,
+        public Student(int studentID, int roomID, DateTime date,
                     string firstname, string lastname)
         {
             StudentID = studentID;
             RoomID = roomID;
-            DateTime = dateTime;
+            Date = date;
             FirstName = firstname;
             LastName = lastname;
         }

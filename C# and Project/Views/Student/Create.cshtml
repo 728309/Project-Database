@@ -1,0 +1,36 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model C__and_Project.Models.Student
+
+@{
+    ViewData["Title"] = "Add Student";
+}
+
+<h1>New Student</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group py-2">
+        <label for="FirstName">First Name:</label>
+        <input asp-for="FirstName" class="form-control" required />
+    </div>
+
+    <div class="form-group py-2">
+        <label for="LastName">Last Name:</label>
+        <input asp-for="LastName" class="form-control" required />
+    </div>
+
+    <div class="form-group py-2">
+        <label for="RoomID">Room ID:</label>
+        <input asp-for="RoomID" type="number" class="form-control" required />
+    </div>
+
+    <div class="form-group py-2">
+        <label for="Date">Date:</label>
+        <input asp-for="Date" type="date" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
+
+<a asp-action="Index" class="btn btn-secondary">Back to Student Page</a>

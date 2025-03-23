@@ -35,6 +35,12 @@ namespace C__and_Project.Controllers
         [HttpPost]
         public IActionResult Create(Student student)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return View(student);
+            }
+
             try
             {
                 // Add student via repository
@@ -93,13 +99,24 @@ namespace C__and_Project.Controllers
             {
                 // Get student via repository
                 Student? student = _studentRepository.GetStudentByID((int)id);
+                if (student == null)
+                {
+                    return NotFound();
+                }
+
                 return View(student);
             }
         }
 
-        [HttpPost]
+            [HttpPost]
         public IActionResult Edit(Student student)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return View(student);
+            }
+
             try
             {
                 // Update student via repository
@@ -107,8 +124,9 @@ namespace C__and_Project.Controllers
 
                 return RedirectToAction("Index");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", $"Error updating student: {ex.Message}");
                 return View(student);
             }
         }
