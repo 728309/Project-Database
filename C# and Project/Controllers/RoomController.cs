@@ -63,22 +63,30 @@ namespace C__and_Project.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Room updatedRoom)
+        public IActionResult Edit(Room room)
         {
             if (ModelState.IsValid)
             {
-                _roomRepository.UpdateRoom(updatedRoom);
+                _roomRepository.UpdateRoom(room);
                 return RedirectToAction("Index");
             }
-            return View(updatedRoom);
+            return View(room);
         }
 
+        // Delete method (GET) to confirm deletion
         public IActionResult Delete(int id)
         {
             var room = _roomRepository.GetRoomById(id);
             if (room == null)
                 return NotFound();
 
+            return View(room);
+        }
+
+        // Delete method (POST) to handle deletion
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeleteConfirmed(int id)
+        {
             _roomRepository.DeleteRoom(id);
             return RedirectToAction("Index");
         }

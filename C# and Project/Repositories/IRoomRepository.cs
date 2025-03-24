@@ -11,7 +11,6 @@ namespace C__and_Project.Repositories
         void UpdateRoom(Room room);
 
         void DeleteRoom(Room room);
-
-
+        void DeleteRoom(int id);
     }
 }
