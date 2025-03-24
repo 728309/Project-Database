@@ -72,5 +72,15 @@ namespace C__and_Project.Controllers
             }
             return View(updatedRoom);
         }
+
+        public IActionResult Delete(int id)
+        {
+            var room = _roomRepository.GetRoomById(id);
+            if (room == null)
+                return NotFound();
+
+            _roomRepository.DeleteRoom(id);
+            return RedirectToAction("Index");
+        }
     }
  }
