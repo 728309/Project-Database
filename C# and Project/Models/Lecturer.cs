@@ -9,7 +9,7 @@ namespace C__and_Project.Models
         public string LastName { get; set; }
         public int PhoneNumber { get; set; }
         public string DateofBirth { get; set; }
-
+        //I feel like this should be DateTime but I'm not sure how to get it to work exactly yet
         public Lecturer()
         {
 

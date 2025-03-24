@@ -1,0 +1,39 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model C__and_Project.Models.Lecturer
+
+@{
+    ViewData["Title"] = "Edit Lecturer";
+}
+
+<h2>Edit</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="LecturerID" />
+
+    <div class="mb-3">
+        <label for="FirstName" class="form-label">First Name:</label>
+        <input asp-for="FirstName" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="LastName" class="form-label">Last Name:</label>
+        <input asp-for="LastName" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="PhoneNumber" class="form-label">Room ID:</label>
+        <input asp-for="PhoneNumber" type="number" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="DateofBirth" class="form-label">DateofBirth:</label>
+        <input asp-for="DateofBirth" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-success">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+<a asp-action="Index">Back to List</a>
