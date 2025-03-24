@@ -34,7 +34,7 @@ namespace C__and_Project
             // Configure default route
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Room}/{action=Index}/{id?}"); // Set RoomController as the default
+                pattern: "{controller=Lecturer}/{action=Index}/{id?}"); // Set LecturerController as the default
 
             app.Run();
         }
