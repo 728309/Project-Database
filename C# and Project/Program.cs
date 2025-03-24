@@ -8,33 +8,32 @@ namespace C__and_Project
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container
             builder.Services.AddControllersWithViews();
 
-            // Register repositories (Dependency Injection)
-            builder.Services.AddSingleton<IUsersRepository, UsersRepository>(); // Users Repository
-            builder.Services.AddSingleton<ILecturerRepository, LecturerRepository>(); // Lecturer Repository
+            //builder.Services.AddSingleton<IUsersRepository, DummyUsersRepository>();
+
+            builder.Services.AddSingleton<IUsersRepository, UsersRepository>();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline
+            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                app.UseHsts(); // Enables HTTP Strict Transport Security (HSTS) for security
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
             }
 
-            app.UseHttpsRedirection(); // Enforce HTTPS
-            app.UseStaticFiles(); // Enable serving static files (CSS, JS, images)
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
-            app.UseRouting(); // Enable routing
+            app.UseRouting();
 
-            app.UseAuthorization(); // Enable authorization middleware
+            app.UseAuthorization();
 
-            // Configure default route
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Lecturer}/{action=Index}/{id?}"); // Set LecturerController as the default
+                pattern: "{controller=Users}/{action=Index}/{id?}");
 
             app.Run();
         }
