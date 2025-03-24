@@ -14,7 +14,7 @@ namespace C__and_Project.Models
         {
 
         }
-
+        //I'm just adding a comment here to test out something
         public Lecturer(int lecturerID,
                     string firstName, string lastName, int phoneNumber, string dateofBirth)
         {
