@@ -2,27 +2,27 @@
 
 namespace C__and_Project.Models
 {
-    public class LECTURER
+    public class Lecturer
     {
         public int LecturerID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int PhoneNumber { get; set; }
         public string DateofBirth { get; set; }
-
-        public LECTURER()
+        //I feel like this should be DateTime but I'm not sure how to get it to work exactly yet
+        public Lecturer()
         {
 
         }
 
-        public LECTURER(int lecturerID,
-                    string firstname, string lastname, int phoneNumber, string DoB)
+        public Lecturer(int lecturerID,
+                    string firstName, string lastName, int phoneNumber, string dateofBirth)
         {
             LecturerID = lecturerID;
-            FirstName = firstname;
-            LastName = lastname;
+            FirstName = firstName;
+            LastName = lastName;
             PhoneNumber = phoneNumber;
-            DateofBirth = DoB;
+            DateofBirth = dateofBirth;
         }
     }
 }

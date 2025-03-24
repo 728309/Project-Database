@@ -50,10 +50,10 @@ namespace C__and_Project.Repositories
             return lecturers;
         }
 
-        public Lecturer? GetLecturerByLastName(string LastName)
+        public Lecturer? GetLecturerByID(int LecturerID)
         {
             string query = "SELECT LecturerID, FirstName, LastName, PhoneNumber, DateofBirth FROM Lecturers WHERE LecturerID = @LecturerID";
-            SqlParameter[] sqlParameters = { new SqlParameter("@LastName", SqlDbType.Int) { Value = LastName } };
+            SqlParameter[] sqlParameters = { new SqlParameter("@LecturerID", SqlDbType.Int) { Value = LecturerID } };
 
             return ExecuteQueryMapLecturer(query, sqlParameters);
         }

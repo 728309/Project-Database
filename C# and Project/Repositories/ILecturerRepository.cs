@@ -7,7 +7,7 @@ namespace C__and_Project.Repositories
     public interface ILecturerRepository
     {
         List<Lecturer> GetAllLecturers();
-        Lecturer? GetLecturerByLastName(string LastName);
+        Lecturer? GetLecturerByID(int LecturerID);
         void AddLecturer(Lecturer lectuer);
         void UpdateLecturer(Lecturer lecturer);
         void DeleteLecturer(Lecturer lecturer);
