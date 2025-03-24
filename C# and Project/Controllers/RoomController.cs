@@ -54,6 +54,23 @@ namespace C__and_Project.Controllers
 
             return View(rooms);
         }
+        public IActionResult Edit(int id)
+        {
+            var room = _roomRepository.GetRoomById(id);
+            if (room == null)
+                return NotFound();
+            return View(room);
+        }
 
+        [HttpPost]
+        public IActionResult Edit(Room updatedRoom)
+        {
+            if (ModelState.IsValid)
+            {
+                _roomRepository.UpdateRoom(updatedRoom);
+                return RedirectToAction("Index");
+            }
+            return View(updatedRoom);
+        }
     }
  }
