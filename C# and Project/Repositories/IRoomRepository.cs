@@ -7,7 +7,11 @@ namespace C__and_Project.Repositories
         List<Room> GetAllRooms();
         Room GetRoomById(int id);
         void AddRoom(Room room);
-        
+
+        void UpdateRoom(Room room);
+
+        void DeleteRoom(Room room);
+
 
     }
 }
