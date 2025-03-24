@@ -1,0 +1,29 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Room
+
+
+<h2>Delete Room</h2>
+<h3>Are you sure you want to delete this room?</h3>
+
+<h4>Room Details</h4>
+<hr />
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(model => model.RoomID)</dt>
+    <dd>@Html.DisplayFor(model => model.RoomID)</dd>
+    <dt>@Html.DisplayNameFor(model => model.RoomType)</dt>
+    <dd>@Html.DisplayFor(model => model.RoomType)</dd>
+    <dt>@Html.DisplayNameFor(model => model.Capacity)</dt>
+    <dd>@Html.DisplayFor(model => model.Capacity)</dd>
+    <dt>@Html.DisplayNameFor(model => model.RoomNumber)</dt>
+    <dd>@Html.DisplayFor(model => model.RoomNumber)</dd>
+</dl>
+
+<form asp-action="DeleteConfirmed">
+    <input type="hidden" asp-for="RoomID" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
+<a href="@Url.Action("Index", "Room")" class="btn btn-secondary">Cancel</a>
