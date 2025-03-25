@@ -13,4 +13,7 @@ namespace C__and_Project.Repositories
         void DeleteRoom(Room room);
         void DeleteRoom(int id);
     }
+
+    //interfaces for repo
+
 }

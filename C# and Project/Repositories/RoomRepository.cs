@@ -50,6 +50,10 @@ namespace C__and_Project.Repositories
             }
         }
 
+        public void DeleteRoom(Room room)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
