@@ -11,13 +11,13 @@ namespace C__and_Project.Repositories
 
         public LecturerRepository(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("C#andProjectDatabase");
+            _connectionString = configuration.GetConnectionString("prjdb25");
         }
 
         public List<Lecturer> GetAllLecturers()
         {
             List<Lecturer> lecturers = new List<Lecturer>();
-            string query = "SELECT LecturerID, FirstName, LastName, PhoneNumber, DateofBirth FROM Lecturers ORDER BY LastName";
+            string query = "SELECT * FROM Lecturer ORDER BY LastName";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -52,14 +52,14 @@ namespace C__and_Project.Repositories
 
         public Lecturer? GetLecturerByID(int LecturerID)
         {
-            string query = "SELECT LecturerID, FirstName, LastName, PhoneNumber, DateofBirth FROM Lecturers WHERE LecturerID = @LecturerID";
+            string query = "SELECT * FROM Lecturer WHERE LecturerID = @LecturerID";
             SqlParameter[] sqlParameters = { new SqlParameter("@LecturerID", SqlDbType.Int) { Value = LecturerID } };
 
             return ExecuteQueryMapLecturer(query, sqlParameters);
         }
         public void AddLecturer(Lecturer lecturer)
         {
-            string checkquery = "SELECT COUNT(*) FROM Lecturers WHERE LecturerID = @LecturerID";
+            string checkquery = "SELECT COUNT(*) FROM Lecturer WHERE LecturerID = @LecturerID";
 
             string query = "INSERT INTO Lecturers (FirstName, LastName, PhoneNumber, DateofBirth) " +
                            "VALUES (@FirstName, @LastName, @PhoneNumber, @DateofBirth);" +
@@ -106,7 +106,7 @@ namespace C__and_Project.Repositories
         }
         public void UpdateLecturer(Lecturer lecturer)
         {
-            string query = "UPDATE Lecturers SET FirstName = @FirstName, LastName = @LastName, PhoneNumber = @PhoneNumber, DateofBirth = @DateofBirth WHERE LecturerID = @LecturerID";
+            string query = "UPDATE Lecturer SET FirstName = @FirstName, LastName = @LastName, PhoneNumber = @PhoneNumber, DateofBirth = @DateofBirth WHERE LecturerID = @LecturerID";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -128,7 +128,7 @@ namespace C__and_Project.Repositories
         }
         public void DeleteLecturer(Lecturer lecturer)
         {
-            string query = "DELETE FROM Lecturers WHERE LecturerID = @LecturerID";
+            string query = "DELETE FROM Lecturer WHERE LecturerID = @LecturerID";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
