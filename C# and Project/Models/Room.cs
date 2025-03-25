@@ -3,15 +3,15 @@
     public class Room
     {
         public int RoomID { get; set; }
-        public bool RoomType { get; set; }
+        public string TypeRoom { get; set; }
         public int Capacity { get; set; }
 
-        public int RoomNumber { get; set; } //maybe change to string if you want to specify the building number
+        public string RoomNumber { get; set; } //maybe change to string if you want to specify the building number
 
-        public Room(int roomID, bool roomType, int capacity, int roomNumber)
+        public Room(int roomID, string typeRoom, int capacity, string roomNumber)
         {
             RoomID = roomID;
-            RoomType = roomType;
+            TypeRoom = typeRoom;
             Capacity = capacity;
             RoomNumber = roomNumber;
         }

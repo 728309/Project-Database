@@ -1,62 +1,179 @@
-﻿using C__and_Project.Models;
+﻿using System.Data;
+using C__and_Project.Models;
+using Microsoft.Data.SqlClient;
 
 namespace C__and_Project.Repositories
 {
     public class RoomRepository : IRoomRepository
     {
-        private static List<Room> rooms = new List<Room>
-    {
-        new Room(1, "Dormitory", 8, 101),
-        new Room(2, "Single", 1, 102),
-        new Room(3, "Dormitory", 6, 103),
-        new Room(4, "Single", 1, 104),
-        new Room(5, "Dormitory", 8, 105),
-        new Room(6, "Single", 1, 106)
-    };
+        private readonly string _connectionString;
+
+        public RoomRepository(IConfiguration configuration)
+        {
+            _connectionString = configuration.GetConnectionString("prjdb25");
+        }
 
         public List<Room> GetAllRooms()
         {
-            return rooms ?? new List<Room>();
-        }
+            List<Room> room = new List<Room>();
+            string query = "SELECT * FROM Room ORDER BY RoomNumber";
 
-        public Room GetRoomById(int id)
-        {
-            return rooms.FirstOrDefault(r => r.RoomID == id);
-        }
-
-        public void AddRoom(Room room)//check out
-        {
-            room.RoomID = rooms.Max(r => r.RoomID) + 1;
-            rooms.Add(room);
-        }
-
-        public void UpdateRoom(Room updatedRoom)//check out
-        {
-            var room = rooms.FirstOrDefault(r => r.RoomID == updatedRoom.RoomID);
-            if (room != null)
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                room.RoomType = updatedRoom.RoomType;
-                room.Capacity = updatedRoom.Capacity;
-                room.RoomNumber = updatedRoom.RoomNumber;
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    try
+                    {
+                        connection.Open();
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Room.Add(new Room
+                                {
+                                    RoomID = Convert.ToInt32(reader["RoomID"]),
+                                    RoomType = reader["RoomType"].ToString(),
+                                    Capacity = Convert.ToInt32(reader["RoomID"]),
+                                    RoomNumber = reader["RoomNumber"].ToString(),
+                                   
+                                });
+                            }
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        throw new Exception("Database error occurred while retrieving students", ex);
+                    }
+                }
             }
-
+            return Room;
         }
-        public void DeleteRoom(int id)//checkout
+
+        public Room? GetRootByID(int RoomID)
         {
-            var room = rooms.FirstOrDefault(r => r.RoomID == id);
-            if (room != null)
+            string query = "SELECT RoomID, RoomType, Capacity, RoomNumber WHERE roomID = @roomID";
+            SqlParameter[] sqlParameters = { new SqlParameter("@roomID", SqlDbType.Int) { Value = RoomID } };
+
+            return ExecuteQueryMapStudent(query, sqlParameters);
+        }
+
+        public void AddRoom(Room room)
+        {
+            string checkquery = "SELECT COUNT(*) FROM Student WHERE roomID = @roomID";
+
+            string query = "INSERT INTO Room(, LastName, DateTime, RoomID) " +
+                           "VALUES (@FirstName, @LastName, @DateTIme, @RoomID);" +
+                           "SELECT SCOPE_IDENTITY();";
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                rooms.Remove(room);
+                connection.Open();
+
+                using (SqlCommand Checkcommand = new SqlCommand(checkquery, connection))
+                {
+                    Checkcommand.Parameters.AddWithValue("@StudentID", student.StudentID);
+                    int count = (int)Checkcommand.ExecuteScalar();
+
+                    if (count > 0)
+                    {
+                        throw new Exception("A student with the same student number already exists.");
+                    }
+                }
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@FirstName", student.FirstName);
+                    command.Parameters.AddWithValue("@LastName", student.LastName);
+                    command.Parameters.AddWithValue("@DateTime", student.Date);
+                    command.Parameters.AddWithValue("@RoomID", student.RoomID);
+
+                    try
+                    {
+                        connection.Open();
+                        int rowsAffected = command.ExecuteNonQuery();
+
+                        if (rowsAffected != 1)
+                        {
+                            throw new Exception("Adding student failed!");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Something went wrong", ex);
+                    }
+                }
             }
         }
 
-        public void DeleteRoom(Room room)
+        public void UpdateStudent(Student student)
         {
-            throw new NotImplementedException();
+            string query = "UPDATE Student SET FirstName = @FirstName, LastName = @LastName, " +
+                           "RoomID = @RoomID, DateTime = @DateTime WHERE StudentID = @StudentID";
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@StudentID", student.StudentID);
+                    command.Parameters.AddWithValue("@FirstName", student.FirstName);
+                    command.Parameters.AddWithValue("@LastName", student.LastName);
+                    command.Parameters.AddWithValue("@RoomID", student.RoomID);
+                    command.Parameters.AddWithValue("@DateTime", student.Date);
+
+                    connection.Open();
+                    int rowsAffected = command.ExecuteNonQuery();
+
+                    if (rowsAffected == 0)
+                        throw new Exception("No student records updated!");
+                }
+            }
+        }
+
+        public void DeleteStudent(Student student)
+        {
+            string query = "DELETE FROM Student WHERE StudentID = @StudentID";
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@StudentID", student.StudentID);
+
+                    connection.Open();
+                    int rowsAffected = command.ExecuteNonQuery();
+
+                    if (rowsAffected == 0)
+                        throw new Exception("No student records deleted!");
+                }
+            }
+        }
+
+        private Student ExecuteQueryMapStudent(string query, SqlParameter[] sqlParameters)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddRange(sqlParameters);
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Student
+                            {
+                                StudentID = Convert.ToInt32(reader["StudentID"]),
+                                FirstName = reader["FirstName"].ToString(),
+                                LastName = reader["LastName"].ToString(),
+                                RoomID = Convert.ToInt32(reader["RoomID"]),
+                                Date = Convert.ToDateTime(reader["DateTime"])
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
         }
     }
-
-
 }
-
-
