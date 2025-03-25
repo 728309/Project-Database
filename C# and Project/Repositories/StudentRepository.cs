@@ -10,13 +10,13 @@ namespace C__and_Project.Repositories
 
         public StudentRepository(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("C#andProjectDatabase");
+            _connectionString = configuration.GetConnectionString("prjdb25");
         }
 
         public List<Student> GetAllStudents()
         {
             List<Student> students = new List<Student>();
-            string query = "SELECT StudentID, RoomID , DateTime, FirstName, LastName FROM Students ORDER BY LastName";
+            string query = "SELECT * FROM Student ORDER BY LastName";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -51,7 +51,7 @@ namespace C__and_Project.Repositories
 
         public Student? GetStudentByID(int studentID)
         {
-            string query = "SELECT StudentID, RoomID, DateTime, FirstName, LastName FROM Students WHERE StudentID = @StudentID";
+            string query = "SELECT StudentID, RoomID, DateTime, FirstName, LastName FROM Student WHERE StudentID = @StudentID";
             SqlParameter[] sqlParameters = { new SqlParameter("@StudentID", SqlDbType.Int) { Value = studentID } };
 
             return ExecuteQueryMapStudent(query, sqlParameters);
@@ -59,9 +59,9 @@ namespace C__and_Project.Repositories
 
         public void AddStudent(Student student)
         {
-            string checkquery = "SELECT COUNT(*) FROM Students WHERE StudentID = @StudentID";
+            string checkquery = "SELECT COUNT(*) FROM Student WHERE StudentID = @StudentID";
 
-            string query = "INSERT INTO Students (FirstName, LastName, DateTime, RoomID) " +
+            string query = "INSERT INTO Student (FirstName, LastName, DateTime, RoomID) " +
                            "VALUES (@FirstName, @LastName, @DateTIme, @RoomID);" +
                            "SELECT SCOPE_IDENTITY();";
 
@@ -107,7 +107,7 @@ namespace C__and_Project.Repositories
 
         public void UpdateStudent(Student student)
         {
-            string query = "UPDATE Students SET FirstName = @FirstName, LastName = @LastName, " +
+            string query = "UPDATE Student SET FirstName = @FirstName, LastName = @LastName, " +
                            "RoomID = @RoomID, DateTime = @DateTime WHERE StudentID = @StudentID";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -131,7 +131,7 @@ namespace C__and_Project.Repositories
 
         public void DeleteStudent(Student student )
         {
-            string query = "DELETE FROM Students WHERE StudentID = @StudentID";
+            string query = "DELETE FROM Student WHERE StudentID = @StudentID";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {

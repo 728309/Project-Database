@@ -117,9 +117,10 @@ namespace C__and_Project.Controllers
                 return View(lecturer);
             }
         }
-        public IActionResult Index()
+        /*public IActionResult Index()
         {
             return View();
         }
+        */
     }
 }
