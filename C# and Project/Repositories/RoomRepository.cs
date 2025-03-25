@@ -29,12 +29,12 @@ namespace C__and_Project.Repositories
                         {
                             while (reader.Read())
                             {
-                                Room.Add(new Room
+                                Room.Add(new room
                                 {
                                     RoomID = Convert.ToInt32(reader["RoomID"]),
-                                    RoomType = reader["RoomType"].ToString(),
+                                    TypeRoom = reader["RoomType"].ToString(),
                                     Capacity = Convert.ToInt32(reader["RoomID"]),
-                                    RoomNumber = reader["RoomNumber"].ToString(),
+                                    RoomNumber = reader["RoomNumber"].ToString()
                                    
                                 });
                             }
@@ -42,16 +42,16 @@ namespace C__and_Project.Repositories
                     }
                     catch (SqlException ex)
                     {
-                        throw new Exception("Database error occurred while retrieving students", ex);
+                        throw new Exception("Database error occurred while retrieving rooms", ex);
                     }
                 }
             }
-            return Room;
+            return room;
         }
-
-        public Room? GetRootByID(int RoomID)
+        
+        public Room? GetRoomById(int RoomID)
         {
-            string query = "SELECT RoomID, RoomType, Capacity, RoomNumber WHERE roomID = @roomID";
+            string query = "SELECT RoomID, TypeRoom, Capacity, RoomNumber WHERE roomID = @roomID";
             SqlParameter[] sqlParameters = { new SqlParameter("@roomID", SqlDbType.Int) { Value = RoomID } };
 
             return ExecuteQueryMapStudent(query, sqlParameters);
@@ -61,8 +61,8 @@ namespace C__and_Project.Repositories
         {
             string checkquery = "SELECT COUNT(*) FROM Student WHERE roomID = @roomID";
 
-            string query = "INSERT INTO Room(, LastName, DateTime, RoomID) " +
-                           "VALUES (@FirstName, @LastName, @DateTIme, @RoomID);" +
+            string query = "INSERT INTO Room( roomID, typeRoom, capacity, roomNumber) " +
+                           "VALUES (@roomID, @typeRoom, @capacity, @roomNumber);" +
                            "SELECT SCOPE_IDENTITY();";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -71,21 +71,21 @@ namespace C__and_Project.Repositories
 
                 using (SqlCommand Checkcommand = new SqlCommand(checkquery, connection))
                 {
-                    Checkcommand.Parameters.AddWithValue("@StudentID", student.StudentID);
+                    Checkcommand.Parameters.AddWithValue("@roomID", room.RoomID);
                     int count = (int)Checkcommand.ExecuteScalar();
 
                     if (count > 0)
                     {
-                        throw new Exception("A student with the same student number already exists.");
+                        throw new Exception("The room is unavailble.");
                     }
                 }
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@FirstName", student.FirstName);
-                    command.Parameters.AddWithValue("@LastName", student.LastName);
-                    command.Parameters.AddWithValue("@DateTime", student.Date);
-                    command.Parameters.AddWithValue("@RoomID", student.RoomID);
+                    command.Parameters.AddWithValue("@roomID", room.RoomID);
+                    command.Parameters.AddWithValue("@LastName", room.TypeRoom);
+                    command.Parameters.AddWithValue("@DateTime", room.Capacity);
+                    command.Parameters.AddWithValue("@RoomID", room.RoomNumber);
 
                     try
                     {
@@ -94,7 +94,7 @@ namespace C__and_Project.Repositories
 
                         if (rowsAffected != 1)
                         {
-                            throw new Exception("Adding student failed!");
+                            throw new Exception("Adding room failed!");
                         }
                     }
                     catch (Exception ex)
@@ -105,7 +105,7 @@ namespace C__and_Project.Repositories
             }
         }
 
-        public void UpdateStudent(Student student)
+        public void UpdateRoom(Room room)
         {
             string query = "UPDATE Student SET FirstName = @FirstName, LastName = @LastName, " +
                            "RoomID = @RoomID, DateTime = @DateTime WHERE StudentID = @StudentID";
@@ -114,22 +114,21 @@ namespace C__and_Project.Repositories
             {
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@StudentID", student.StudentID);
-                    command.Parameters.AddWithValue("@FirstName", student.FirstName);
-                    command.Parameters.AddWithValue("@LastName", student.LastName);
-                    command.Parameters.AddWithValue("@RoomID", student.RoomID);
-                    command.Parameters.AddWithValue("@DateTime", student.Date);
+                    command.Parameters.AddWithValue("@RoomID", room.RoomID);
+                    command.Parameters.AddWithValue("@TypeRoom", room.TypeRoom);
+                    command.Parameters.AddWithValue("@Capacity", room.Capacity);
+                    command.Parameters.AddWithValue("@RoomNumber", room.RoomNumber);
 
                     connection.Open();
                     int rowsAffected = command.ExecuteNonQuery();
 
                     if (rowsAffected == 0)
-                        throw new Exception("No student records updated!");
+                        throw new Exception("No Room records updated!");
                 }
             }
         }
 
-        public void DeleteStudent(Student student)
+        public void DeleteRoom(Room room)
         {
             string query = "DELETE FROM Student WHERE StudentID = @StudentID";
 
@@ -137,18 +136,18 @@ namespace C__and_Project.Repositories
             {
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@StudentID", student.StudentID);
+                    command.Parameters.AddWithValue("@RoomID", room.RoomID);
 
                     connection.Open();
                     int rowsAffected = command.ExecuteNonQuery();
 
                     if (rowsAffected == 0)
-                        throw new Exception("No student records deleted!");
+                        throw new Exception("No room records deleted!");
                 }
             }
         }
 
-        private Student ExecuteQueryMapStudent(string query, SqlParameter[] sqlParameters)
+        private Room ExecuteQueryMapStudent(string query, SqlParameter[] sqlParameters)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -161,13 +160,12 @@ namespace C__and_Project.Repositories
                     {
                         if (reader.Read())
                         {
-                            return new Student
+                            return new Room
                             {
-                                StudentID = Convert.ToInt32(reader["StudentID"]),
-                                FirstName = reader["FirstName"].ToString(),
-                                LastName = reader["LastName"].ToString(),
                                 RoomID = Convert.ToInt32(reader["RoomID"]),
-                                Date = Convert.ToDateTime(reader["DateTime"])
+                                TypeRoom = reader["RoomType"].ToString(),
+                                Capacity = Convert.ToInt32(reader["RoomID"]),
+                                RoomNumber = reader["RoomNumber"].ToString()
                             };
                         }
                     }
