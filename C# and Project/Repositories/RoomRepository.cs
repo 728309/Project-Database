@@ -16,7 +16,7 @@ namespace C__and_Project.Repositories
         public List<Room> GetAllRooms()
         {
             List<Room> room = new List<Room>();
-            string query = "SELECT * FROM Room ORDER BY RoomNumber";
+            string query = "SELECT * FROM Room ORDER BY roomNumber";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -29,12 +29,12 @@ namespace C__and_Project.Repositories
                         {
                             while (reader.Read())
                             {
-                                Room.Add(new room
+                                room.Add(new Room
                                 {
-                                    RoomID = Convert.ToInt32(reader["RoomID"]),
-                                    TypeRoom = reader["RoomType"].ToString(),
-                                    Capacity = Convert.ToInt32(reader["RoomID"]),
-                                    RoomNumber = reader["RoomNumber"].ToString()
+                                    RoomID = Convert.ToInt32(reader["roomID"]),
+                                    TypeRoom = reader["typeRoom"].ToString(),
+                                    Capacity = Convert.ToInt32(reader["capacity"]),
+                                    RoomNumber = reader["roomNumber"].ToString()
                                    
                                 });
                             }
@@ -51,7 +51,7 @@ namespace C__and_Project.Repositories
         
         public Room? GetRoomById(int RoomID)
         {
-            string query = "SELECT RoomID, TypeRoom, Capacity, RoomNumber WHERE roomID = @roomID";
+            string query = "SELECT roomID, typeRoom, capacity, roomNumber WHERE roomID = @roomID";
             SqlParameter[] sqlParameters = { new SqlParameter("@roomID", SqlDbType.Int) { Value = RoomID } };
 
             return ExecuteQueryMapStudent(query, sqlParameters);
@@ -160,7 +160,7 @@ namespace C__and_Project.Repositories
                     {
                         if (reader.Read())
                         {
-                            return new Room
+                            return new room
                             {
                                 RoomID = Convert.ToInt32(reader["RoomID"]),
                                 TypeRoom = reader["RoomType"].ToString(),

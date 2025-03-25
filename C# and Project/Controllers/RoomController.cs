@@ -83,12 +83,7 @@ namespace C__and_Project.Controllers
             return View(room);
         }
 
-        // Delete method (POST) to handle deletion
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirmed(int id)
-        {
-            _roomRepository.DeleteRoom(id);
-            return RedirectToAction("Index");
+    
         }
     }
- }
+ 
