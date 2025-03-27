@@ -15,7 +15,7 @@ namespace C__and_Project.Controllers
 
         public IActionResult Index()
         {
-           List<User> users = _usersRepository.GetAllUsers();
+            List<User> users = _usersRepository.GetAllUsers();
             return View(users);
         }
 

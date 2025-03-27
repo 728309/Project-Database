@@ -14,6 +14,8 @@ namespace C__and_Project
             // Register repositories (Dependency Injection)
             builder.Services.AddSingleton<IUsersRepository, UsersRepository>(); // Users Repository
             builder.Services.AddSingleton<IRoomRepository, RoomRepository>(); // Rooms Repository
+            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+            builder.Services.AddScoped<ILecturerRepository, LecturerRepository>();
 
             var app = builder.Build();
 

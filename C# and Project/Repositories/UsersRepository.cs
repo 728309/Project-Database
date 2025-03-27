@@ -34,7 +34,7 @@ namespace C__and_Project.Repositories
                                 UserID = Convert.ToInt32(reader["UserID"]),
                                 UserName = reader["UserName"].ToString(),
                                 MobileNumber = reader["MobileNumber"].ToString(),
-                                EmailAddress = reader["EmailAddress"].ToString() 
+                                EmailAddress = reader["EmailAddress"].ToString()
                             });
                         }
                     }
@@ -76,7 +76,7 @@ namespace C__and_Project.Repositories
                     command.Parameters.AddWithValue("@UserName", user.UserName);
                     command.Parameters.AddWithValue("@MobileNumber", user.MobileNumber);
                     command.Parameters.AddWithValue("@EmailAddress", user.EmailAddress);
-                    
+
 
                     //hash password in separate service before storing! 
                     // command.Parameters.AddWithValue("@Password", user.Password); 
