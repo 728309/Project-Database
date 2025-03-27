@@ -18,9 +18,10 @@
 <table class="table table-striped table-hover">
     <thead class="table-dark">
         <tr>
+            <th>Student Number</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Room Id</th>
+            <th>Room </th>
             <th>Date</th>
             <th>Actions</th>
         </tr>
@@ -29,9 +30,10 @@
         @foreach (var student in Model)
         {
             <tr>
+                <td>@student.StudentNmbr</td>
                 <td>@student.FirstName</td>
                 <td>@student.LastName</td>
-                <td>@student.RoomID</td>
+                <td>@student.Room</td>
                 <td>@student.Date.ToString("dd-MM-yyyy")</td>
                 <td>
                     <a href="@Url.Action("Edit", "Student", new { id = student.StudentID })" class="btn btn-primary btn-sm">Edit</a>

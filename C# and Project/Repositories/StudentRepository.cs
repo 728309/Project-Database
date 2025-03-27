@@ -32,7 +32,8 @@ namespace C__and_Project.Repositories
                                 students.Add(new Student
                                 {
                                     StudentID = Convert.ToInt32(reader["StudentID"]),
-                                    RoomID = Convert.ToInt32(reader["RoomID"]),
+                                    StudentNmbr = Convert.ToInt32(reader["StudentNmbr"]),
+                                    Room = Convert.ToInt32(reader["Room"]),
                                     Date = Convert.ToDateTime(reader["DateTime"]),
                                     FirstName = reader["FirstName"].ToString(),
                                     LastName = reader["LastName"].ToString(),
@@ -51,7 +52,7 @@ namespace C__and_Project.Repositories
 
         public Student? GetStudentByID(int studentID)
         {
-            string query = "SELECT StudentID, RoomID, DateTime, FirstName, LastName FROM Student WHERE StudentID = @StudentID";
+            string query = "SELECT StudentID, StudentNmbr, Room, DateTime, FirstName, LastName FROM Student WHERE StudentID = @StudentID";
             SqlParameter[] sqlParameters = { new SqlParameter("@StudentID", SqlDbType.Int) { Value = studentID } };
 
             return ExecuteQueryMapStudent(query, sqlParameters);
@@ -61,8 +62,8 @@ namespace C__and_Project.Repositories
         {
             string checkquery = "SELECT COUNT(*) FROM Student WHERE StudentID = @StudentID";
 
-            string query = "INSERT INTO Student (FirstName, LastName, DateTime, RoomID) " +
-                           "VALUES (@FirstName, @LastName, @DateTIme, @RoomID);" +
+            string query = "INSERT INTO Student (FirstName, LastName, DateTime, Room, StudentNmbr ) " +
+                           "VALUES (@FirstName, @LastName, @DateTIme, @Room, @StudentNmbr );" +
                            "SELECT SCOPE_IDENTITY();";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -85,7 +86,8 @@ namespace C__and_Project.Repositories
                     command.Parameters.AddWithValue("@FirstName", student.FirstName);
                     command.Parameters.AddWithValue("@LastName", student.LastName);
                     command.Parameters.AddWithValue("@DateTime", student.Date);
-                    command.Parameters.AddWithValue("@RoomID", student.RoomID);
+                    command.Parameters.AddWithValue("@RoomID", student.Room);
+                    command.Parameters.AddWithValue("@StudentNmbr", student.StudentNmbr);
 
                     try
                     {
@@ -108,7 +110,7 @@ namespace C__and_Project.Repositories
         public void UpdateStudent(Student student)
         {
             string query = "UPDATE Student SET FirstName = @FirstName, LastName = @LastName, " +
-                           "RoomID = @RoomID, DateTime = @DateTime WHERE StudentID = @StudentID";
+                           "RoomID = @RoomID, DateTime = @DateTime WHERE StudentID = @StudentID, StudentNmbr = @StudentNmbr";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -117,8 +119,9 @@ namespace C__and_Project.Repositories
                     command.Parameters.AddWithValue("@StudentID", student.StudentID);
                     command.Parameters.AddWithValue("@FirstName", student.FirstName);
                     command.Parameters.AddWithValue("@LastName", student.LastName);
-                    command.Parameters.AddWithValue("@RoomID", student.RoomID);
+                    command.Parameters.AddWithValue("@RoomID", student.Room);
                     command.Parameters.AddWithValue("@DateTime", student.Date);
+                    command.Parameters.AddWithValue("@StudentNmbr", student.StudentNmbr);
 
                     connection.Open();
                     int rowsAffected = command.ExecuteNonQuery();
@@ -166,8 +169,9 @@ namespace C__and_Project.Repositories
                                 StudentID = Convert.ToInt32(reader["StudentID"]),
                                 FirstName = reader["FirstName"].ToString(),
                                 LastName = reader["LastName"].ToString(),
-                                RoomID = Convert.ToInt32(reader["RoomID"]),
-                               Date = Convert.ToDateTime(reader["DateTime"])
+                                Room = Convert.ToInt32(reader["Room"]),
+                               Date = Convert.ToDateTime(reader["DateTime"]),
+                               StudentNmbr = Convert.ToInt32(reader["StudentNmbr"])
                             };
                         }
                     }
