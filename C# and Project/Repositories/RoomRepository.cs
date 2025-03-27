@@ -13,14 +13,14 @@ namespace C__and_Project.Repositories
             _connectionString = configuration.GetConnectionString("prjdb25");
         }
 
-        public List<Room> GetAllRooms()
+        List<Room> IRoomRepository. GetAllRooms()
         {
             List<Room> room = new List<Room>();
-            string query = "SELECT * FROM Room ORDER BY roomNumber";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                using (SqlCommand command = new SqlCommand(query, connection))
+                string query = "SELECT * FROM Room ORDER BY roomNumber";
+                SqlCommand command = new SqlCommand(query, connection);
                 {
                     try
                     {
@@ -51,7 +51,7 @@ namespace C__and_Project.Repositories
         
         public Room? GetRoomById(int RoomID)
         {
-            string query = "SELECT roomID, typeRoom, capacity, roomNumber WHERE roomID = @roomID";
+            string query = "SELECT roomID, typeRoom, capacity, roomNumber FROM Room WHERE roomID = @roomID";
             SqlParameter[] sqlParameters = { new SqlParameter("@roomID", SqlDbType.Int) { Value = RoomID } };
 
             return ExecuteQueryMapStudent(query, sqlParameters);
@@ -59,7 +59,7 @@ namespace C__and_Project.Repositories
 
         public void AddRoom(Room room)
         {
-            string checkquery = "SELECT COUNT(*) FROM Student WHERE roomID = @roomID";
+            string checkquery = "SELECT COUNT(*) FROM Room WHERE roomID = @roomID";
 
             string query = "INSERT INTO Room( roomID, typeRoom, capacity, roomNumber) " +
                            "VALUES (@roomID, @typeRoom, @capacity, @roomNumber);" +
@@ -82,10 +82,9 @@ namespace C__and_Project.Repositories
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@roomID", room.RoomID);
-                    command.Parameters.AddWithValue("@LastName", room.TypeRoom);
-                    command.Parameters.AddWithValue("@DateTime", room.Capacity);
-                    command.Parameters.AddWithValue("@RoomID", room.RoomNumber);
+                    command.Parameters.AddWithValue("@typeRoom", room.TypeRoom);
+                    command.Parameters.AddWithValue("@capacity", room.Capacity);
+                    command.Parameters.AddWithValue("@roomNumber", room.RoomNumber);
 
                     try
                     {
@@ -107,8 +106,8 @@ namespace C__and_Project.Repositories
 
         public void UpdateRoom(Room room)
         {
-            string query = "UPDATE Student SET FirstName = @FirstName, LastName = @LastName, " +
-                           "RoomID = @RoomID, DateTime = @DateTime WHERE StudentID = @StudentID";
+            string query = "UPDATE Room SET typeRoom = @TypeRoom, capacity = @Capacity, " +
+               "roomNumber = @RoomNumber WHERE roomID = @RoomID"; 
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -130,7 +129,7 @@ namespace C__and_Project.Repositories
 
         public void DeleteRoom(Room room)
         {
-            string query = "DELETE FROM Student WHERE StudentID = @StudentID";
+            string query = "DELETE FROM Room WHERE roomID = @RoomID";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -160,7 +159,7 @@ namespace C__and_Project.Repositories
                     {
                         if (reader.Read())
                         {
-                            return new room
+                            return new Room
                             {
                                 RoomID = Convert.ToInt32(reader["RoomID"]),
                                 TypeRoom = reader["RoomType"].ToString(),

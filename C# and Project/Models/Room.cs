@@ -8,6 +8,11 @@
 
         public string RoomNumber { get; set; } //maybe change to string if you want to specify the building number
 
+
+        public Room()
+        {
+
+        }
         public Room(int roomID, string typeRoom, int capacity, string roomNumber)
         {
             RoomID = roomID;
