@@ -27,11 +27,13 @@
     {
         <tr>
             <td>@room.RoomID</td>
-            <td>@room.RoomType</td>
+            <td>@room.TypeRoom</td>
             <td>@room.Capacity</td>
             <td>@room.RoomNumber</td>
             <td>
                 <a href="@Url.Action("Details", "Room", new { id = room.RoomID })">Details</a>
+                <a href="@Url.Action("Edit", "Room", new { id = room.RoomID })">Edit</a> |
+                <a href="@Url.Action("Delete", "Room", new { id = room.RoomID })" onclick="return confirm('Are you sure?');">Delete</a>
             </td>
         </tr>
     }

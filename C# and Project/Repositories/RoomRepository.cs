@@ -1,58 +1,176 @@
-﻿using C__and_Project.Models;
+﻿using System.Data;
+using C__and_Project.Models;
+using Microsoft.Data.SqlClient;
 
 namespace C__and_Project.Repositories
 {
     public class RoomRepository : IRoomRepository
     {
-        private static List<Room> rooms = new List<Room>
-    {
-       new Room(1, "Dormitory", 30, 101),
-        new Room(2, "Single", 25, 102),
-        new Room(3, "Dormitory", 40, 103),
-        new Room(4, "Single", 20, 104),
-        new Room(5, "Dormitory", 35, 105),
-        new Room(6, "Single", 50, 106)
-    };
+        private readonly string _connectionString;
 
-        public List<Room> GetAllRooms()
+        public RoomRepository(IConfiguration configuration)
         {
-            return rooms ?? new List<Room>();
+            _connectionString = configuration.GetConnectionString("prjdb25");
         }
 
-        public Room GetRoomById(int id)
+        List<Room> IRoomRepository. GetAllRooms()
         {
-            return rooms.FirstOrDefault(r => r.RoomID == id);
-        }
+            List<Room> room = new List<Room>();
 
-        public void AddRoom(Room room)//check out
-        {
-            room.RoomID = rooms.Max(r => r.RoomID) + 1;
-            rooms.Add(room);
-        }
-
-        public void UpdateRoom(Room updatedRoom)//check out
-        {
-            var room = rooms.FirstOrDefault(r => r.RoomID == updatedRoom.RoomID);
-            if (room != null)
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                room.RoomType = updatedRoom.RoomType;
-                room.Capacity = updatedRoom.Capacity;
-                room.RoomNumber = updatedRoom.RoomNumber;
+                string query = "SELECT * FROM Room ORDER BY roomNumber";
+                SqlCommand command = new SqlCommand(query, connection);
+                {
+                    try
+                    {
+                        connection.Open();
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                room.Add(new Room
+                                {
+                                    RoomID = Convert.ToInt32(reader["roomID"]),
+                                    TypeRoom = reader["typeRoom"].ToString(),
+                                    Capacity = Convert.ToInt32(reader["capacity"]),
+                                    RoomNumber = reader["roomNumber"].ToString()
+                                   
+                                });
+                            }
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        throw new Exception("Database error occurred while retrieving rooms", ex);
+                    }
+                }
             }
-
+            return room;
         }
-        public void DeleteRoom(int id)//checkout
+        
+        public Room? GetRoomById(int RoomID)
         {
-            var room = rooms.FirstOrDefault(r => r.RoomID == id);
-            if (room != null)
+            string query = "SELECT roomID, typeRoom, capacity, roomNumber FROM Room WHERE roomID = @roomID";
+            SqlParameter[] sqlParameters = { new SqlParameter("@roomID", SqlDbType.Int) { Value = RoomID } };
+
+            return ExecuteQueryMapStudent(query, sqlParameters);
+        }
+
+        public void AddRoom(Room room)
+        {
+            string checkquery = "SELECT COUNT(*) FROM Room WHERE roomID = @roomID";
+
+            string query = "INSERT INTO Room( roomID, typeRoom, capacity, roomNumber) " +
+                           "VALUES (@roomID, @typeRoom, @capacity, @roomNumber);" +
+                           "SELECT SCOPE_IDENTITY();";
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                rooms.Remove(room);
+                connection.Open();
+
+                using (SqlCommand Checkcommand = new SqlCommand(checkquery, connection))
+                {
+                    Checkcommand.Parameters.AddWithValue("@roomID", room.RoomID);
+                    int count = (int)Checkcommand.ExecuteScalar();
+
+                    if (count > 0)
+                    {
+                        throw new Exception("The room is unavailble.");
+                    }
+                }
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@typeRoom", room.TypeRoom);
+                    command.Parameters.AddWithValue("@capacity", room.Capacity);
+                    command.Parameters.AddWithValue("@roomNumber", room.RoomNumber);
+
+                    try
+                    {
+                        connection.Open();
+                        int rowsAffected = command.ExecuteNonQuery();
+
+                        if (rowsAffected != 1)
+                        {
+                            throw new Exception("Adding room failed!");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Something went wrong", ex);
+                    }
+                }
             }
         }
 
+        public void UpdateRoom(Room room)
+        {
+            string query = "UPDATE Room SET typeRoom = @TypeRoom, capacity = @Capacity, " +
+               "roomNumber = @RoomNumber WHERE roomID = @RoomID"; 
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@RoomID", room.RoomID);
+                    command.Parameters.AddWithValue("@TypeRoom", room.TypeRoom);
+                    command.Parameters.AddWithValue("@Capacity", room.Capacity);
+                    command.Parameters.AddWithValue("@RoomNumber", room.RoomNumber);
+
+                    connection.Open();
+                    int rowsAffected = command.ExecuteNonQuery();
+
+                    if (rowsAffected == 0)
+                        throw new Exception("No Room records updated!");
+                }
+            }
+        }
+
+        public void DeleteRoom(Room room)
+        {
+            string query = "DELETE FROM Room WHERE roomID = @RoomID";
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@RoomID", room.RoomID);
+
+                    connection.Open();
+                    int rowsAffected = command.ExecuteNonQuery();
+
+                    if (rowsAffected == 0)
+                        throw new Exception("No room records deleted!");
+                }
+            }
+        }
+
+        private Room ExecuteQueryMapStudent(string query, SqlParameter[] sqlParameters)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddRange(sqlParameters);
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Room
+                            {
+                                RoomID = Convert.ToInt32(reader["RoomID"]),
+                                TypeRoom = reader["RoomType"].ToString(),
+                                Capacity = Convert.ToInt32(reader["RoomID"]),
+                                RoomNumber = reader["RoomNumber"].ToString()
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
     }
-
-
 }
-
-

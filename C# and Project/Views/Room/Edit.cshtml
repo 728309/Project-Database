@@ -5,8 +5,10 @@
 }
 @model Room
 
-<h2>Create Room</h2>
-<form asp-action="Create">
+<h2>Edit Room</h2>
+<form asp-action="Edit">
+    <input type="hidden" asp-for="RoomID" />
+
     <label>Room Type</label>
     <select asp-for="TypeRoom">
         <option value="Single">Single</option>
@@ -19,6 +21,6 @@
     <label>Room Number</label>
     <input type="number" asp-for="RoomNumber" required /><br />
 
-    <button type="submit">Create</button>
+    <button type="submit">Update</button>
 </form>
 <a href="@Url.Action("Index", "Room")">Back to List</a>
