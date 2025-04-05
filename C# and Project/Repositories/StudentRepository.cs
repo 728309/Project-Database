@@ -148,7 +148,7 @@ namespace C__and_Project.Repositories
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddRange(sqlParameters);
-                    connection.Open();
+                    connection.Open(); 
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
