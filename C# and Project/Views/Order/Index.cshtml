@@ -78,12 +78,12 @@
 
 <h2>Place Order</h2>
 
-<form method="post">
+<form method="post" action="@Url.Action("PlaceOrder", "Order")">
     <label for="Student">Student:</label>
     <select id="Student" name="StudentId">
         @foreach (var student in Model.Students)
         {
-            <option value="@student.StudentID">@student.FirstName</option>
+            <option value="@student.StudentID">@student.FirstName @student.LastName</option>
         }
     </select>
 
@@ -108,6 +108,7 @@
             <th>Student</th>
             <th>Drink</th>
             <th>Amount</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -117,9 +118,17 @@
                 <td>@order.StudentId</td>
                 <td>@order.DrinkId</td>
                 <td>@order.Amount</td>
+                <td>
+                <td>
+                    <a href="@Url.Action("Edit", "Order", new { studentId = order.StudentId, drinkId = order.DrinkId })" class="btn btn-primary">Edit</a>
+                    |
+                    <a href="@Url.Action("Delete", "Order", new { studentId = order.StudentId, drinkId = order.DrinkId })" class="btn btn-danger" style="margin-left: 10px;">Delete</a>
+                </td>
+
+                </td>
             </tr>
         }
     </tbody>
 </table>
 
-<a href="@Url.Action("PlaceOrder", "Order")">Add Another Order</a>
+<a href="@Url.Action("Index", "Order")">Add Another Order</a>

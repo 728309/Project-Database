@@ -8,7 +8,7 @@
 
         public Order()
         {
-            
+
         }
 
         public Order(int studentId, int drinkId, int amount)

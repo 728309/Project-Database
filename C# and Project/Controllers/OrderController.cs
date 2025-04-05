@@ -19,8 +19,7 @@ namespace C__and_Project.Controllers
 
         public IActionResult Index()
         {
-            var orders = _orderRepository.GetAllOrders();
-            return View(orders);
+            return PlaceOrder();
         }
 
         public IActionResult PlaceOrder()
@@ -35,10 +34,16 @@ namespace C__and_Project.Controllers
         }
 
         [HttpPost]
-        public IActionResult PlaceOrder(Order order)
+        public IActionResult PlaceOrder(int StudentId, int DrinkId, int Amount)
         {
             try
             {
+                Order order = new Order
+                {
+                    StudentId = StudentId,
+                    DrinkId = DrinkId,
+                    Amount = Amount
+                };
                 _orderRepository.AddOrder(order);
                 TempData["SuccessMessage"] = "Order placed successfully!";
             }
@@ -48,5 +53,51 @@ namespace C__and_Project.Controllers
             }
             return RedirectToAction("Index");
         }
+        public IActionResult Edit(int studentId, int drinkId)
+        {
+            var order = _orderRepository.GetOrderByID(studentId, drinkId);
+            if (order == null) return NotFound();
+
+            return View(order);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Order order)
+        {
+            if (ModelState.IsValid)
+            {
+                _orderRepository.UpdateOrder(order);
+                return RedirectToAction("Index"); // or the appropriate view
+            }
+            return View(order);
+        }
+
+        public IActionResult Delete(int studentId, int drinkId)
+        {
+            var order = _orderRepository.GetOrderByID(studentId, drinkId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            return View(order);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(Order order)
+        {
+            try
+            {
+                _orderRepository.DeleteOrder(order);
+                TempData["SuccessMessage"] = "Order deleted successfully!";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+            return RedirectToAction("Index");
+        }
+
+
     }
 }

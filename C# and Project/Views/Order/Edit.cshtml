@@ -1,0 +1,32 @@
+﻿@model C__and_Project.Models.Order
+
+@{
+    ViewData["Title"] = "Edit Order";
+}
+
+<h2>Edit Order</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="StudentId" />
+    <input type="hidden" asp-for="DrinkId" />
+
+    <div class="mb-3">
+        <label for="StudentId" class="form-label">Student ID:</label>
+        <input asp-for="StudentId" class="form-control" readonly />
+    </div>
+
+    <div class="mb-3">
+        <label for="DrinkId" class="form-label">Drink ID:</label>
+        <input asp-for="DrinkId" class="form-control" readonly />
+    </div>
+
+    <div class="mb-3">
+        <label for="Amount" class="form-label">Amount:</label>
+        <input asp-for="Amount" type="number" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-success">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+<a asp-action="Index">Back to List</a>
