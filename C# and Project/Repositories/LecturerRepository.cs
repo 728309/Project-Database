@@ -33,10 +33,12 @@ namespace C__and_Project.Repositories
                                 lecturers.Add(new Lecturer
                                 {
                                     LecturerID = Convert.ToInt32(reader["LecturerID"]),
-                                    FirstName = reader["FirstName"].ToString(),
-                                    LastName = reader["LastName"].ToString(),
-                                    PhoneNumber = Convert.ToInt32(reader["PhoneNumber"]),
-                                    DateofBirth = reader["DateofBirth"].ToString()
+                                    LecturerNumber = Convert.ToInt32(reader["lecturerNumber"]),
+                                    FirstName = reader["firstName"].ToString(),
+                                    LastName = reader["lastName"].ToString(),
+                                    Room = Convert.ToInt32(reader["room"]),
+                                    PhoneNumber = Convert.ToInt32(reader["phoneNumber"]),
+                                    DateofBirth = Convert.ToDateTime(reader["dateOfBirth"]),
                                 });
                             }
                         }
@@ -50,10 +52,10 @@ namespace C__and_Project.Repositories
             return lecturers;
         }
 
-        public Lecturer? GetLecturerByID(int LecturerID)
+        public Lecturer? GetLecturerByID(int lecturerID)
         {
-            string query = "SELECT * FROM Lecturer WHERE LecturerID = @LecturerID";
-            SqlParameter[] sqlParameters = { new SqlParameter("@LecturerID", SqlDbType.Int) { Value = LecturerID } };
+            string query = "SELECT * FROM Lecturer WHERE lecturerID = @lecturerID";
+            SqlParameter[] sqlParameters = { new SqlParameter("@lecturerID", SqlDbType.Int) { Value = lecturerID } };
 
             return ExecuteQueryMapLecturer(query, sqlParameters);
         }
@@ -61,8 +63,8 @@ namespace C__and_Project.Repositories
         {
             string checkquery = "SELECT COUNT(*) FROM Lecturer WHERE LecturerID = @LecturerID";
 
-            string query = "INSERT INTO Lecturers (FirstName, LastName, PhoneNumber, DateofBirth) " +
-                           "VALUES (@FirstName, @LastName, @PhoneNumber, @DateofBirth);" +
+            string query = "INSERT INTO Lecturer (lecturerNumber, firstName, lastName, room, phoneNumber, dateofBirth) " +
+                           "VALUES (@lecturerNumber, @firstName, @lastName, @room, @phoneNumber, @dateofBirth);" +
                            "SELECT SCOPE_IDENTITY();";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -71,7 +73,7 @@ namespace C__and_Project.Repositories
 
                 using (SqlCommand Checkcommand = new SqlCommand(checkquery, connection))
                 {
-                    Checkcommand.Parameters.AddWithValue("@LecturerID", lecturer.LecturerID);
+                    Checkcommand.Parameters.AddWithValue("@lecturerID", lecturer.LecturerID);
                     int count = (int)Checkcommand.ExecuteScalar();
 
                     if (count > 0)
@@ -82,41 +84,37 @@ namespace C__and_Project.Repositories
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@FirstName", lecturer.FirstName);
-                    command.Parameters.AddWithValue("@LastName", lecturer.LastName);
-                    command.Parameters.AddWithValue("@PhoneNumber", lecturer.PhoneNumber);
-                    command.Parameters.AddWithValue("@DateofBirth", lecturer.DateofBirth);
+                    command.Parameters.AddWithValue("@lecturerNumber", lecturer.LecturerNumber);
+                    command.Parameters.AddWithValue("@firstName", lecturer.FirstName);
+                    command.Parameters.AddWithValue("@lastName", lecturer.LastName);
+                    command.Parameters.AddWithValue("@room", lecturer.Room);
+                    command.Parameters.AddWithValue("@phoneNumber", lecturer.PhoneNumber);
+                    command.Parameters.AddWithValue("@dateofBirth", lecturer.DateofBirth);
 
-                    try
-                    {
-                        connection.Open();
-                        int rowsAffected = command.ExecuteNonQuery();
+                    int rowsAffected = command.ExecuteNonQuery();
 
-                        if (rowsAffected != 1)
-                        {
-                            throw new Exception("Adding lecturer failed.");
-                        }
-                    }
-                    catch (Exception ex)
+                    if (rowsAffected != 1)
                     {
-                        throw new Exception("Something didn't go as planned...", ex);
+                        throw new Exception("Adding lecturer failed!");
                     }
                 }
             }
         }
         public void UpdateLecturer(Lecturer lecturer)
         {
-            string query = "UPDATE Lecturer SET FirstName = @FirstName, LastName = @LastName, PhoneNumber = @PhoneNumber, DateofBirth = @DateofBirth WHERE LecturerID = @LecturerID";
+            string query = "UPDATE Lecturer SET firstName = @firstName, lastName = @lastName, phoneNumber = @phoneNumber, room = @room, dateOfBirth = @dateOfBirth WHERE lecturerID = @lecturerID";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@LecturerID", lecturer.LecturerID);
-                    command.Parameters.AddWithValue("@FirstName", lecturer.FirstName);
-                    command.Parameters.AddWithValue("@LastName", lecturer.LastName);
-                    command.Parameters.AddWithValue("@PhoneNumber", lecturer.PhoneNumber);
-                    command.Parameters.AddWithValue("@DateofBirth", lecturer.DateofBirth);
+                    command.Parameters.AddWithValue("@lecturerID", lecturer.LecturerID);
+                    command.Parameters.AddWithValue("@lecturerNumber", lecturer.LecturerNumber);
+                    command.Parameters.AddWithValue("@firstName", lecturer.FirstName);
+                    command.Parameters.AddWithValue("@lastName", lecturer.LastName);
+                    command.Parameters.AddWithValue("@room", lecturer.Room);
+                    command.Parameters.AddWithValue("@phoneNumber", lecturer.PhoneNumber);
+                    command.Parameters.AddWithValue("@dateOfBirth", lecturer.DateofBirth);
 
                     connection.Open();
                     int rowsAffected = command.ExecuteNonQuery();
@@ -128,13 +126,13 @@ namespace C__and_Project.Repositories
         }
         public void DeleteLecturer(Lecturer lecturer)
         {
-            string query = "DELETE FROM Lecturer WHERE LecturerID = @LecturerID";
+            string query = "DELETE FROM Lecturer WHERE lecturerID = @lecturerID";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@LecturerID", lecturer.LecturerID);
+                    command.Parameters.AddWithValue("@lecturerID", lecturer.LecturerID);
 
                     connection.Open();
                     int rowsAffected = command.ExecuteNonQuery();
@@ -159,11 +157,13 @@ namespace C__and_Project.Repositories
                         {
                             return new Lecturer
                             {
-                                LecturerID = Convert.ToInt32(reader["LecturerID"]),
-                                FirstName = reader["FirstName"].ToString(),
-                                LastName = reader["LastName"].ToString(),
-                                PhoneNumber = Convert.ToInt32(reader["PhoneNumber"]),
-                                DateofBirth = reader["DateofBirth"].ToString()
+                                LecturerID = Convert.ToInt32(reader["lecturerID"]),
+                                LecturerNumber = Convert.ToInt32(reader["lecturerNumber"]),
+                                FirstName = reader["firstName"].ToString(),
+                                LastName = reader["lastName"].ToString(),
+                                Room = Convert.ToInt32(reader["room"]),
+                                PhoneNumber = Convert.ToInt32(reader["phoneNumber"]),
+                                DateofBirth = Convert.ToDateTime(reader["dateOfBirth"])
                             };
                         }
                     }

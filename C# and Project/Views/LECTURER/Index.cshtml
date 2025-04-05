@@ -1,45 +1,48 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model IEnumerable<C__and_Project.Models.Lecturer>
+﻿@model IEnumerable<C__and_Project.Models.Lecturer>
+
 @{
-    ViewData["Title"] = "Lecturers";
+    ViewData["Title"] = "Lecturer Page";
 }
 
-<h2>Lecturer</h2>
+<h2>Lecturers</h2>
 
 <form method="get">
     <label for="lastNameFilter">Filter by Last Name:</label>
     <input type="text" id="lastNameFilter" name="lastNameFilter" />
     <button type="submit">Search</button>
-</form> 
+</form>
+
+<p>
+    <a href="@Url.Action("Create", "Lecturer")" class="btn btn-success">Add New Lecturer</a>
+</p>
 
 <table class="table table-striped table-hover">
     <thead class="table-dark">
         <tr>
-            <th>LecturerID</th>
+            <th>Lecturer Number</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>PhoneNumber</th>
-            <th>DateofBirth</th>
+            <th>Room</th>
+            <th>Phone Number</th>
+            <th>Date of Birth</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        @{
-            foreach (Lecturer lecturer in Model)
-            {
-                <tr>
-                    <td>@lecturer.LecturerID</td>
-                    <td>@lecturer.FirstName</td>
-                    <td>@lecturer.LastName</td>
-                    <td>@lecturer.PhoneNumber</td>
-                    <td>@lecturer.DateofBirth</td>
-                    <td>
-                        <a href="@Url.Action("Edit", "Lecturer", new { id = lecturer.LecturerID })" class="btn btn-primary btn-sm">Edit</a>
-                        <a href="@Url.Action("Delete", "Lecturer", new { id = lecturer.LecturerID })" class="btn btn-danger btn-sm">Delete</a>
-                    </td>
-                </tr>
-            }
+        @foreach (var lecturer in Model)
+        {
+            <tr>
+                <td>@lecturer.LecturerNumber</td>
+                <td>@lecturer.FirstName</td>
+                <td>@lecturer.LastName</td>
+                <td>@lecturer.Room</td>
+                <td>@lecturer.PhoneNumber</td>
+                <td>@lecturer.DateofBirth.ToString("dd-MM-yyyy")</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Lecturer", new { id = lecturer.LecturerID })" class="btn btn-primary btn-sm">Edit</a>
+                    <a href="@Url.Action("Delete", "Lecturer", new { id = lecturer.LecturerID })" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
