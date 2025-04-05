@@ -1,39 +1,37 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model C__and_Project.Models.Lecturer
+﻿@model C__and_Project.Models.Lecturer
 
 @{
     ViewData["Title"] = "Delete Lecturer";
 }
 
-<h1>Delete Student</h1>
+<div class="container mt-5">
+    <h2 class="text-center">Delete Lecturer</h2>
 
-<form asp-action="Delete" method="post">
-    <input hidden asp-for="LecturerID" />
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="LecturerID" />
 
-    <div class="form-group py-2">
-        <label for="FirstName">First Name:</label>
-        <input asp-for="FirstName" class="form-control" readonly />
-    </div>
+        <div class="mb-3">
+            <label for="FirstName" class="form-label">First Name:</label>
+            <input asp-for="FirstName" class="form-control" readonly disabled />
+        </div>
 
-    <div class="form-group py-2">
-        <label for="LastName">Last Name:</label>
-        <input asp-for="LastName" class="form-control" readonly />
-    </div>
+        <div class="mb-3">
+            <label for="LastName" class="form-label">Last Name:</label>
+            <input asp-for="LastName" class="form-control" readonly disabled />
+        </div>
 
-    <div class="form-group py-2">
-        <label for="RoomID">Room ID:</label>
-        <input asp-for="Room" class="form-control" readonly />
-    </div>
+        <div class="mb-3">
+            <label for="Room" class="form-label">Room ID:</label>
+            <input asp-for="Room" class="form-control" readonly disabled />
+        </div>
 
-    <div class="form-group py-2">
-        <label for="DateofBirth">Date of Birth:</label>
-        <input asp-for="DateofBirth" class="form-control" readonly />
-    </div>
+        <div class="mb-3">
+            <label for="DateofBirth" class="form-label">Date of Birth:</label>
+            <input asp-for="DateofBirth" class="form-control" readonly disabled />
+        </div>
 
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
-
-<a asp-action="Index">Back to Lecturer Page</a>
+        <div class="text-center">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            <a asp-action="Index" class="btn btn-secondary btn-sm">Cancel</a>
+        </div>
+    </form>

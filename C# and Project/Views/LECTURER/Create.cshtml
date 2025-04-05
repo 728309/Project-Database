@@ -4,50 +4,56 @@
     ViewData["Title"] = "Add Lecturer";
 }
 
-<h1>Add New Lecturer</h1>
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Add New Lecturer</h2>
 
-<form asp-action="Create" method="post">
-    @Html.AntiForgeryToken()
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
 
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <div class="form-group py-2">
-        <label asp-for="LecturerNumber"></label>
-        <input asp-for="LecturerNumber" class="form-control" />
-        <span asp-validation-for="LecturerNumber" class="text-danger"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="LecturerNumber" class="form-label">Lecturer Number</label>
+                <input asp-for="LecturerNumber" class="form-control" />
+                <span asp-validation-for="LecturerNumber" class="text-danger"></span>
+            </div>
 
-    <div class="form-group py-2">
-        <label asp-for="FirstName"></label>
-        <input asp-for="FirstName" class="form-control" />
-        <span asp-validation-for="FirstName" class="text-danger"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="FirstName" class="form-label">First Name</label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
 
-    <div class="form-group py-2">
-        <label asp-for="LastName"></label>
-        <input asp-for="LastName" class="form-control" />
-        <span asp-validation-for="LastName" class="text-danger"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="LastName" class="form-label">Last Name</label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
 
-    <div class="form-group py-2">
-        <label asp-for="Room"></label>
-        <input asp-for="Room" type="number" class="form-control" />
-        <span asp-validation-for="Room" class="text-danger"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="Room" class="form-label">Room</label>
+                <input asp-for="Room" type="number" class="form-control" />
+                <span asp-validation-for="Room" class="text-danger"></span>
+            </div>
 
-    <div class="form-group py-2">
-        <label asp-for="PhoneNumber"></label>
-        <input asp-for="PhoneNumber" type="number" class="form-control" />
-        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                <input asp-for="PhoneNumber" type="number" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
 
-    <div class="form-group py-2">
-        <label asp-for="DateofBirth"></label>
-        <input asp-for="DateofBirth" type="date" class="form-control" />
-        <span asp-validation-for="DateofBirth" class="text-danger"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="DateofBirth" class="form-label">Date of Birth</label>
+                <input asp-for="DateofBirth" type="date" class="form-control" />
+                <span asp-validation-for="DateofBirth" class="text-danger"></span>
+            </div>
 
-    <button type="submit" class="btn btn-primary">Add</button>
-</form>
+            <div class="d-flex justify-content-center gap-3 py-3">
+                <button type="submit" class="btn btn-primary">Add</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </div>
+    </form>
 
-<a asp-action="Index" class="btn btn-secondary">Back to Lecturer Page</a>
+</div>
