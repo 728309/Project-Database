@@ -41,6 +41,15 @@ namespace C__and_Project
                 pattern: "{controller=Room}/{action=Index}/{id?}"); // Set RoomController as the default
 
             app.Run();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+
         }
     }
 }
