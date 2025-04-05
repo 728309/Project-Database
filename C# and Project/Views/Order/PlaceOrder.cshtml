@@ -1,0 +1,125 @@
+﻿@model C__and_Project.Models.OrderViewModel
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+    }
+
+    h2 {
+        color: #2c3e50;
+    }
+
+    form {
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        width: 300px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    label {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+    select, input[type="number"] {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        margin-top: 15px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #2980b9;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    th, td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    th {
+        background-color: #ecf0f1;
+    }
+
+    a {
+        display: inline-block;
+        margin-top: 20px;
+        text-decoration: none;
+        color: #3498db;
+        font-weight: bold;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<h2>Place Order</h2>
+
+<form method="post">
+    <label for="Student">Student:</label>
+    <select id="Student" name="StudentId">
+        @foreach (var student in Model.Students)
+        {
+            <option value="@student.StudentID">@student.FirstName</option>
+        }
+    </select>
+
+    <label for="Drink">Drink:</label>
+    <select id="Drink" name="DrinkId">
+        @foreach (var drink in Model.Drinks)
+        {
+            <option value="@drink.DrinkID">@drink.DrinkName</option>
+        }
+    </select>
+
+    <label for="Amount">Amount:</label>
+    <input type="number" id="Amount" name="Amount" min="1" />
+
+    <button type="submit">Place Order</button>
+</form>
+
+<h2>Existing Orders</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Student</th>
+            <th>Drink</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model.Orders)
+        {
+            <tr>
+                <td>@order.StudentId</td>
+                <td>@order.DrinkId</td>
+                <td>@order.Amount</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("PlaceOrder", "Order")">Add Another Order</a>

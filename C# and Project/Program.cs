@@ -16,6 +16,8 @@ namespace C__and_Project
             builder.Services.AddSingleton<IRoomRepository, RoomRepository>(); // Rooms Repository
             builder.Services.AddScoped<IStudentRepository, StudentRepository>();
             builder.Services.AddScoped<ILecturerRepository, LecturerRepository>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IDrinkRepository, DrinkRepository>();
 
             var app = builder.Build();
 
