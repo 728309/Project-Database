@@ -14,10 +14,12 @@ namespace C__and_Project.Repositories
         bool ActivityExists(string name);
 
         //check
-        List<Student> GetParticipantsByActivityId(int activityId);
-        List<Student> GetAvailableStudents(int activityId);
-        void AddParticipantToActivity(int activityId, int studentId);
-        void RemoveParticipantFromActivity(int activityId, int studentId);
+        List<Student> GetParticipantsByActivityId(int activityId); // Get students for a specific activity
+        List<Student> GetAvailableStudents(int activityId); // Get students not participating in a specific activity
+        void AddStudentToActivity(int activityId, int studentId); // Add a student to the activity
+        void RemoveStudentFromActivity(int activityId, int studentId); // Remove a student from the activity
+
+
 
     }
 }

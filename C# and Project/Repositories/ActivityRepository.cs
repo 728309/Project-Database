@@ -238,10 +238,10 @@ namespace C__and_Project.Repositories
         {
             List<Student> students = new List<Student>();
             string query = @"
-        SELECT s.StudentID, s.FirstName, s.LastName, s.Email
+        SELECT s.StudentID, s.StudentNumber, s.FirstName, s.LastName, s.Room, s.Date
         FROM Student s
-        JOIN Participate p ON s.StudentID = p.StudentID
-        WHERE p.ActivityID = @ActivityID";
+        JOIN ActivityStudent as ON s.StudentID = as.StudentID
+        WHERE as.ActivityID = @ActivityID";
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -256,9 +256,11 @@ namespace C__and_Project.Repositories
                         students.Add(new Student
                         {
                             StudentID = Convert.ToInt32(reader["StudentID"]),
+                            StudentNumber = Convert.ToInt32(reader["StudentNumber"]),
                             FirstName = reader["FirstName"].ToString(),
                             LastName = reader["LastName"].ToString(),
-                            Email = reader["Email"].ToString()
+                            Room = Convert.ToInt32(reader["Room"]),
+                            Date = Convert.ToDateTime(reader["Date"])
                         });
                     }
                 }
@@ -267,14 +269,15 @@ namespace C__and_Project.Repositories
             return students;
         }
 
+
         public List<Student> GetAvailableStudents(int activityId)
         {
             List<Student> students = new List<Student>();
             string query = @"
-        SELECT s.StudentID, s.FirstName, s.LastName, s.Email
+        SELECT s.StudentID, s.StudentNumber, s.FirstName, s.LastName, s.Room, s.Date
         FROM Student s
         WHERE s.StudentID NOT IN (
-            SELECT StudentID FROM Participate WHERE ActivityID = @ActivityID
+            SELECT StudentID FROM ActivityStudent WHERE ActivityID = @ActivityID
         )";
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
@@ -290,9 +293,11 @@ namespace C__and_Project.Repositories
                         students.Add(new Student
                         {
                             StudentID = Convert.ToInt32(reader["StudentID"]),
+                            StudentNumber = Convert.ToInt32(reader["StudentNumber"]),
                             FirstName = reader["FirstName"].ToString(),
                             LastName = reader["LastName"].ToString(),
-                            Email = reader["Email"].ToString()
+                            Room = Convert.ToInt32(reader["Room"]),
+                            Date = Convert.ToDateTime(reader["Date"])
                         });
                     }
                 }
@@ -300,9 +305,10 @@ namespace C__and_Project.Repositories
 
             return students;
         }
-        public void AddParticipantToActivity(int activityId, int studentId)
+
+        public void AddStudentToActivity(int activityId, int studentId)
         {
-            string query = "INSERT INTO Participate (ActivityID, StudentID) VALUES (@ActivityID, @StudentID)";
+            string query = "INSERT INTO ActivityStudent (ActivityID, StudentID) VALUES (@ActivityID, @StudentID)";
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -313,6 +319,7 @@ namespace C__and_Project.Repositories
                 cmd.ExecuteNonQuery();
             }
         }
+
         public void RemoveParticipantFromActivity(int activityId, int studentId)
         {
             string query = "DELETE FROM Participate WHERE ActivityID = @ActivityID AND StudentID = @StudentID";
