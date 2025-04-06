@@ -18,7 +18,9 @@ namespace C__and_Project
             builder.Services.AddScoped<ILecturerRepository, LecturerRepository>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IDrinkRepository, DrinkRepository>();
-
+            builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+            builder.Services.AddScoped<ISupervisorRepository, SupervisorRepository>();
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline
@@ -38,7 +40,7 @@ namespace C__and_Project
             // Configure default route
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Room}/{action=Index}/{id?}"); // Set RoomController as the default
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
 

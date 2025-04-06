@@ -171,5 +171,48 @@ namespace C__and_Project.Repositories
             }
             return null;
         }
+        public List<Lecturer> GetSupervisorsByActivityId(int activityId)
+        {
+            List<Lecturer> lecturers = new List<Lecturer>();
+
+            // SQL query to get lecturers who supervise the given activity
+            string query = @"
+        SELECT l.LecturerID, l.lecturerNumber, l.firstName, l.lastName, l.room, l.phoneNumber, l.dateOfBirth
+        FROM Lecturer l
+        INNER JOIN Supervise s ON l.LecturerID = s.LecturerID
+        WHERE s.ActivityID = @ActivityID";
+
+            // Define parameters for SQL query
+            SqlParameter[] sqlParameters = {
+        new SqlParameter("@ActivityID", SqlDbType.Int) { Value = activityId }
+    };
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddRange(sqlParameters);
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            lecturers.Add(new Lecturer
+                            {
+                                LecturerID = Convert.ToInt32(reader["LecturerID"]),
+                                LecturerNumber = Convert.ToInt32(reader["lecturerNumber"]),
+                                FirstName = reader["firstName"].ToString(),
+                                LastName = reader["lastName"].ToString(),
+                                Room = Convert.ToInt32(reader["room"]),
+                                PhoneNumber = Convert.ToInt32(reader["phoneNumber"]),
+                                DateofBirth = Convert.ToDateTime(reader["dateOfBirth"])
+                            });
+                        }
+                    }
+                }
+            }
+
+            return lecturers;
+        }
     }
 }
