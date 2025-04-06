@@ -121,21 +121,12 @@ namespace C__and_Project.Controllers
 
 
 
-        public IActionResult AddSupervisor(int activityId, int lecturerId)
+        // Add a student to the activity
+        public IActionResult AddStudentToActivity(int activityId, int studentId)
         {
-            _supervisorRepository.AddSupervisorToActivity(activityId, lecturerId);
-
-            var lecturer = _lecturerRepository.GetLecturerByID(lecturerId);
-            if (lecturer != null)
-            {
-                TempData["Message"] = $"Successfully added supervisor: {lecturer.FirstName} (ID: {lecturer.LecturerID})";
-            }
-            else
-            {
-                TempData["Message"] = $"Successfully added supervisor with ID: {lecturerId}";
-            }
-
-            return RedirectToAction("ManageSupervisors", new { activityId });
+            _activityRepository.AddStudentToActivity(activityId, studentId);
+            TempData["Message"] = "Student successfully added to the activity.";
+            return RedirectToAction("ManageParticipants", new { activityId });
         }
 
 
@@ -156,6 +147,8 @@ namespace C__and_Project.Controllers
 
             return RedirectToAction("ManageSupervisors", new { activityId });
         }
+
+
         public IActionResult ManageParticipants(int activityId)
         {
             var participants = _activityRepository.GetParticipantsByActivityId(activityId);
