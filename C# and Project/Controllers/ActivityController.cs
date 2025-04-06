@@ -103,6 +103,12 @@ namespace C__and_Project.Controllers
 
         public IActionResult ManageSupervisors(int activityId)
         {
+            var activity = _activityRepository.GetActivityById(activityId);
+            if (activity == null)
+            {
+                return NotFound();
+            }
+
             var allLecturers = _lecturerRepository.GetAllLecturers();
             var supervisors = _lecturerRepository.GetSupervisorsByActivityI(activityId);
 
@@ -113,6 +119,7 @@ namespace C__and_Project.Controllers
             var viewModel = new ManageSupervisorsViewModel
             {
                 ActivityId = activityId,
+                ActivityName = activity.Name, // ← Add this
                 Supervisors = supervisors,
                 AvailableSupervisors = availableLecturers
             };
@@ -122,19 +129,41 @@ namespace C__and_Project.Controllers
 
 
 
-        // Add Supervisor to an Activity
+
+
         public IActionResult AddSupervisor(int activityId, int lecturerId)
         {
             _supervisorRepository.AddSupervisorToActivity(activityId, lecturerId);
-            TempData["Message"] = "Supervisor successfully added.";
+
+            var lecturer = _lecturerRepository.GetLecturerByID(lecturerId);
+            if (lecturer != null)
+            {
+                TempData["Message"] = $"Successfully added supervisor: {lecturer.FirstName} (ID: {lecturer.LecturerID})";
+            }
+            else
+            {
+                TempData["Message"] = $"Successfully added supervisor with ID: {lecturerId}";
+            }
+
             return RedirectToAction("ManageSupervisors", new { activityId });
         }
 
-        // Remove Supervisor from an Activity
+
         public IActionResult RemoveSupervisor(int activityId, int lecturerId)
         {
+            var lecturer = _lecturerRepository.GetLecturerByID(lecturerId);
+
             _supervisorRepository.RemoveSupervisorFromActivity(activityId, lecturerId);
-            TempData["Message"] = "Supervisor successfully removed.";
+
+            if (lecturer != null)
+            {
+                TempData["Message"] = $"Successfully removed supervisor: {lecturer.FirstName} (ID: {lecturer.LecturerID})";
+            }
+            else
+            {
+                TempData["Message"] = $"Successfully removed supervisor with ID: {lecturerId}";
+            }
+
             return RedirectToAction("ManageSupervisors", new { activityId });
         }
         public IActionResult ManageParticipants(int activityId)
@@ -165,6 +194,7 @@ namespace C__and_Project.Controllers
             TempData["Message"] = "Student successfully removed from the activity.";
             return RedirectToAction("ManageParticipants", new { activityId });
         }
+
 
     }
 }
