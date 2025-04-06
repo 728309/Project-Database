@@ -19,7 +19,11 @@
     <input type="number" asp-for="Capacity" required /><br />
 
     <label>Room Number</label>
-    <input type="number" asp-for="RoomNumber" required /><br />
+    <input type="text" asp-for="RoomNumber" required />
+
+
+    <span asp-validation-for="Capacity" class="text-danger"></span>
+
 
     <button type="submit">Update</button>
 </form>

@@ -74,12 +74,15 @@ namespace C__and_Project.Controllers
         }
 
         // Delete method (GET) to confirm deletion
+
+        [HttpPost]
         public IActionResult Delete(int id)
         {
             var room = _roomRepository.GetRoomById(id);
             if (room == null)
                 return NotFound();
 
+            _roomRepository.DeleteRoom(room);
             return View(room);
         }
 
