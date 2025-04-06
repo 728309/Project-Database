@@ -1,0 +1,38 @@
+﻿﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Users</h1>
+    <p>Number of user in te list: @Model.Count</p>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Mobile number</th>
+            <th>Email Address</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (User user in Model)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>@user.MobileNumber</td>
+                    <td>@user.EmailAddress</td>
+
+                    <td>
+                        <a href="/Users/Editcshtml/@user.UserID" class="btn btn-warning">Edit</a>
+                        <a href="/Users/Delete/@user.UserID" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

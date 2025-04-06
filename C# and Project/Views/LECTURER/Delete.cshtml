@@ -1,0 +1,50 @@
+﻿@model C__and_Project.Models.Lecturer
+
+@{
+    ViewData["Title"] = "Delete Lecturer";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">Delete Lecturer</h2>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="LecturerID" />
+
+        <div class="mb-3">
+            <label for="FirstName" class="form-label">First Name:</label>
+            <input asp-for="FirstName" class="form-control" readonly disabled />
+        </div>
+
+        <div class="mb-3">
+            <label for="LastName" class="form-label">Last Name:</label>
+            <input asp-for="LastName" class="form-control" readonly disabled />
+        </div>
+
+        <div class="mb-3">
+            <label for="Room" class="form-label">Room ID:</label>
+            <input asp-for="Room" class="form-control" readonly disabled />
+        </div>
+
+        <div class="mb-3">
+            <label for="DateofBirth" class="form-label">Date of Birth:</label>
+            <input asp-for="DateofBirth" class="form-control" readonly disabled />
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirmDelete()">Delete</button>
+            <a asp-action="Index" class="btn btn-secondary btn-sm">Cancel</a>
+        </div>
+    </form>
+
+    <div class="text-center mt-3">
+        <a asp-action="Index" class="btn btn-link">Back to Lecturer Page</a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this lecturer?');
+        }
+    </script>
+}

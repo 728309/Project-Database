@@ -1,3 +1,5 @@
+using C__and_Project.Repositories;
+
 namespace C__and_Project
 {
     public class Program
@@ -6,31 +8,50 @@ namespace C__and_Project
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Add services to the container
             builder.Services.AddControllersWithViews();
 
+            // Register repositories (Dependency Injection)
+            builder.Services.AddSingleton<IUsersRepository, UsersRepository>(); // Users Repository
+            builder.Services.AddSingleton<IRoomRepository, RoomRepository>(); // Rooms Repository
+            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+            builder.Services.AddScoped<ILecturerRepository, LecturerRepository>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IDrinkRepository, DrinkRepository>();
+            builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+            builder.Services.AddScoped<ISupervisorRepository, SupervisorRepository>();
+            
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Configure the HTTP request pipeline
             if (!app.Environment.IsDevelopment())
             {
-                app.UseExceptionHandler("/Home/zero");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts(); // Enables HTTP Strict Transport Security (HSTS) for security
             }
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseHttpsRedirection(); // Enforce HTTPS
+            app.UseStaticFiles(); // Enable serving static files (CSS, JS, images)
 
-            app.UseRouting();
+            app.UseRouting(); // Enable routing
 
-            app.UseAuthorization();
+            app.UseAuthorization(); // Enable authorization middleware
 
+            // Configure default route
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+
         }
     }
 }

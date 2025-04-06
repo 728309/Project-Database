@@ -1,5 +1,6 @@
-﻿using Microsoft.Data.SqlClients;
+﻿using Microsoft.Data.SqlClient;
 using C__and_Project.Models;
+using System.Data;
 
 namespace C__and_Project.Repositories
 {
@@ -9,7 +10,7 @@ namespace C__and_Project.Repositories
 
         public UsersRepository(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("SomerenDBConnection");
+            _connectionString = configuration.GetConnectionString("C#andProjectDatabase");
         }
 
         List<User> IUsersRepository.GetAllUsers()
@@ -53,19 +54,94 @@ namespace C__and_Project.Repositories
 
         User? IUsersRepository.GetUserByID(int userId)
         {
-            return null;
+            string query = "SELECT UserID, UserName, MobileNumber, EmailAddress FROM Users WHERE UserID = @UserID";
+
+            SqlParameter[] sqlParameters = new SqlParameter[]
+            {
+                    new SqlParameter("@UserID", SqlDbType.Int) { Value = userId }
+            };
+
+            return ExecuteQueryMapUser(query, sqlParameters);
         }
 
         void IUsersRepository.AddUser(User user)
         {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "INSERT INTO Users (UserName, MobileNumber, EmailAddress) " +
+                               "VALUES (@UserName, @MobileNumber, @EmailAddress);" + "SELECT SCOPE_IDENTITY()";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@UserName", user.UserName);
+                    command.Parameters.AddWithValue("@MobileNumber", user.MobileNumber);
+                    command.Parameters.AddWithValue("@EmailAddress", user.EmailAddress);
+
+
+                    //hash password in separate service before storing! 
+                    // command.Parameters.AddWithValue("@Password", user.Password); 
+
+                    try
+                    {
+                        connection.Open();
+
+                        //get last inserted record identity value back 
+                        //user.UserID = Convert.ToInt32(command.ExecuteScalar());
+
+                        int nrOfRowsAffected = command.ExecuteNonQuery();
+
+                        if (nrOfRowsAffected != 1)
+                        {
+                            throw new Exception("Adding user failed!");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Something went wrong", ex);
+                    }
+                }
+            }
         }
 
         void IUsersRepository.UpdateUser(User user)
         {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "UPDATE Users SET UserName = @Name, MobileNumber = @MobileNumber, " +
+                               "EmailAddress = @EmailAddress WHERE UserId = @Id";
+
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Id", user.UserID);
+                command.Parameters.AddWithValue("@Name", user.UserName);
+                command.Parameters.AddWithValue("@MobileNumber", user.MobileNumber);
+                command.Parameters.AddWithValue("@EmailAddress", user.EmailAddress);
+
+                command.Connection.Open();
+                int nrOfRowsAffected = command.ExecuteNonQuery();
+                if (nrOfRowsAffected == 0)
+                    throw new Exception("No records updated!");
+            }
         }
 
         void IUsersRepository.DeleteUser(User user)
         {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "DELETE FROM Users WHERE UserId = @Id";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", user.UserID);
+
+                    connection.Open();
+                    int nrOfRowsAffected = command.ExecuteNonQuery();
+
+                    if (nrOfRowsAffected == 0)
+                    {
+                        throw new Exception("No records deleted!");
+                    }
+                }
+            }
         }
 
 
@@ -90,6 +166,7 @@ namespace C__and_Project.Repositories
                                 EmailAddress = reader["EmailAddress"].ToString()
                             };
                         }
+
                     }
                 }
             }

@@ -1,0 +1,60 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model ManageParticipantsViewModel
+
+<h2>Manage Participants</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Student Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model.Participants)
+        {
+            <tr>
+                <td>@student.FirstName @student.LastName</td>
+                <td>
+                    <a href="@Url.Action("RemoveStudentFromActivity", "Activity", new { activityId = Model.Activity.ActivityID, studentId = student.StudentID })" class="btn btn-danger">Remove</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Available Students</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Student Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model.AvailableStudents)
+        {
+            <tr>
+                <td>@student.FirstName @student.LastName</td>
+                <td>
+                    <a href="@Url.Action("AddStudentToActivity", "Activity", new { activityId = Model.Activity.ActivityID, studentId = student.StudentID })" class="btn btn-success">Add</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+<!-- Back Button -->
+<div class="mb-3">
+    <a href="@Url.Action("Index", "Activity")" class="btn btn-secondary">Back to Activities</a>
+</div>
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}
