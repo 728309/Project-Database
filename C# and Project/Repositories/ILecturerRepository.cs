@@ -11,5 +11,6 @@ namespace C__and_Project.Repositories
         void AddLecturer(Lecturer lectuer);
         void UpdateLecturer(Lecturer lecturer);
         void DeleteLecturer(Lecturer lecturer);
+        List<Lecturer> GetSupervisorsByActivityId(int activityId);
     }
 }

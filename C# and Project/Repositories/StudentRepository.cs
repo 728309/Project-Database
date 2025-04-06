@@ -16,7 +16,7 @@ namespace C__and_Project.Repositories
         public List<Student> GetAllStudents()
         {
             List<Student> students = new List<Student>();
-            string query = "SELECT * FROM Student ORDER BY LastName";
+            string query = "SELECT * FROM Student ORDER BY lastName";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -31,11 +31,12 @@ namespace C__and_Project.Repositories
                             {
                                 students.Add(new Student
                                 {
-                                    StudentID = Convert.ToInt32(reader["StudentID"]),
-                                    RoomID = Convert.ToInt32(reader["RoomID"]),
-                                    Date = Convert.ToDateTime(reader["DateTime"]),
-                                    FirstName = reader["FirstName"].ToString(),
-                                    LastName = reader["LastName"].ToString(),
+                                    StudentID = Convert.ToInt32(reader["studentID"]),
+                                    StudentNumber = Convert.ToInt32(reader["studentNumber"]),
+                                    Room = Convert.ToInt32(reader["room"]),
+                                    Date = Convert.ToDateTime(reader["date"]),
+                                    FirstName = reader["firstName"].ToString(),
+                                    LastName = reader["lastName"].ToString(),
                                 });
                             }
                         }
@@ -51,55 +52,46 @@ namespace C__and_Project.Repositories
 
         public Student? GetStudentByID(int studentID)
         {
-            string query = "SELECT StudentID, RoomID, DateTime, FirstName, LastName FROM Student WHERE StudentID = @StudentID";
-            SqlParameter[] sqlParameters = { new SqlParameter("@StudentID", SqlDbType.Int) { Value = studentID } };
+            string query = "SELECT studentID, studentNumber, room, date, firstName, lastName FROM Student WHERE studentID = @studentID";
+            SqlParameter[] sqlParameters = { new SqlParameter("@studentID", SqlDbType.Int) { Value = studentID } };
 
             return ExecuteQueryMapStudent(query, sqlParameters);
         }
 
         public void AddStudent(Student student)
         {
-            string checkquery = "SELECT COUNT(*) FROM Student WHERE StudentID = @StudentID";
-
-            string query = "INSERT INTO Student (FirstName, LastName, DateTime, RoomID) " +
-                           "VALUES (@FirstName, @LastName, @DateTIme, @RoomID);" +
-                           "SELECT SCOPE_IDENTITY();";
+            string checkQuery = "SELECT COUNT(*) FROM Student WHERE studentID = @studentID";
+            string insertQuery = "INSERT INTO Student (firstName, lastName, date, room, studentNumber) " +
+                                 "VALUES (@firstName, @lastName, @date, @room, @studentNumber);";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
-                using (SqlCommand Checkcommand = new SqlCommand(checkquery, connection))
+                using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
                 {
-                    Checkcommand.Parameters.AddWithValue("@StudentID", student.StudentID);
-                    int count = (int)Checkcommand.ExecuteScalar();
+                    checkCommand.Parameters.AddWithValue("@studentID", student.StudentID);
+                    int count = (int)checkCommand.ExecuteScalar();
 
                     if (count > 0)
                     {
-                        throw new Exception("A student with the same student number already exists.");
+                        throw new Exception("A student with the same student ID already exists.");
                     }
                 }
 
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (SqlCommand command = new SqlCommand(insertQuery, connection))
                 {
-                    command.Parameters.AddWithValue("@FirstName", student.FirstName);
-                    command.Parameters.AddWithValue("@LastName", student.LastName);
-                    command.Parameters.AddWithValue("@DateTime", student.Date);
-                    command.Parameters.AddWithValue("@RoomID", student.RoomID);
+                    command.Parameters.AddWithValue("@firstName", student.FirstName);
+                    command.Parameters.AddWithValue("@lastName", student.LastName); 
+                    command.Parameters.AddWithValue("@date", student.Date);
+                    command.Parameters.AddWithValue("@room", student.Room);
+                    command.Parameters.AddWithValue("@studentNumber", student.StudentNumber);
 
-                    try
-                    {
-                        connection.Open();
-                        int rowsAffected = command.ExecuteNonQuery();
+                    int rowsAffected = command.ExecuteNonQuery();
 
-                        if (rowsAffected != 1)
-                        {
-                            throw new Exception("Adding student failed!");
-                        }
-                    }
-                    catch (Exception ex)
+                    if (rowsAffected != 1)
                     {
-                        throw new Exception("Something went wrong", ex);
+                        throw new Exception("Adding student failed!");
                     }
                 }
             }
@@ -107,18 +99,19 @@ namespace C__and_Project.Repositories
 
         public void UpdateStudent(Student student)
         {
-            string query = "UPDATE Student SET FirstName = @FirstName, LastName = @LastName, " +
-                           "RoomID = @RoomID, DateTime = @DateTime WHERE StudentID = @StudentID";
+          string query = "UPDATE Student SET firstName = @firstName, lastName = @lastName, " +
+                "room = @roomID, date = @date, studentNumber = @studentNumber WHERE studentID = @studentID";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@StudentID", student.StudentID);
-                    command.Parameters.AddWithValue("@FirstName", student.FirstName);
-                    command.Parameters.AddWithValue("@LastName", student.LastName);
-                    command.Parameters.AddWithValue("@RoomID", student.RoomID);
-                    command.Parameters.AddWithValue("@DateTime", student.Date);
+                    command.Parameters.AddWithValue("@studentID", student.StudentID);
+                    command.Parameters.AddWithValue("@firstName", student.FirstName);
+                    command.Parameters.AddWithValue("@lastName", student.LastName);
+                    command.Parameters.AddWithValue("@roomID", student.Room);
+                    command.Parameters.AddWithValue("@date", student.Date);
+                    command.Parameters.AddWithValue("@studentNumber", student.StudentNumber);
 
                     connection.Open();
                     int rowsAffected = command.ExecuteNonQuery();
@@ -131,13 +124,13 @@ namespace C__and_Project.Repositories
 
         public void DeleteStudent(Student student )
         {
-            string query = "DELETE FROM Student WHERE StudentID = @StudentID";
+            string query = "DELETE FROM Student WHERE studentID = @studentID";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@StudentID", student.StudentID);
+                    command.Parameters.AddWithValue("@studentID", student.StudentID);
 
                     connection.Open();
                     int rowsAffected = command.ExecuteNonQuery();
@@ -155,7 +148,7 @@ namespace C__and_Project.Repositories
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddRange(sqlParameters);
-                    connection.Open();
+                    connection.Open(); 
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
@@ -163,11 +156,12 @@ namespace C__and_Project.Repositories
                         {
                             return new Student
                             {
-                                StudentID = Convert.ToInt32(reader["StudentID"]),
-                                FirstName = reader["FirstName"].ToString(),
-                                LastName = reader["LastName"].ToString(),
-                                RoomID = Convert.ToInt32(reader["RoomID"]),
-                               Date = Convert.ToDateTime(reader["DateTime"])
+                                StudentID = Convert.ToInt32(reader["studentID"]),
+                                FirstName = reader["firstName"].ToString(),
+                                LastName = reader["lastName"].ToString(),
+                                Room = Convert.ToInt32(reader["room"]),
+                               Date = Convert.ToDateTime(reader["date"]),
+                               StudentNumber = Convert.ToInt32(reader["studentNumber"])
                             };
                         }
                     }

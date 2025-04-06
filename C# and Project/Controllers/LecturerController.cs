@@ -12,15 +12,9 @@ namespace C__and_Project.Controllers
         {
             _lecturerRepository = lecturerRepository;
         }
-        public IActionResult Index(string lastNameFilter)
+        public IActionResult Index()
         {
-            List<Lecturer> lecturers = _lecturerRepository.GetAllLecturers();
-
-            if (!string.IsNullOrEmpty(lastNameFilter))
-            {
-                lecturers = lecturers.Where(l => l.LastName.StartsWith(lastNameFilter, StringComparison.OrdinalIgnoreCase)).ToList();
-            }
-
+            var lecturers = _lecturerRepository.GetAllLecturers();
             return View(lecturers);
         }
         [HttpGet]
@@ -29,98 +23,58 @@ namespace C__and_Project.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Lecturer lecturer)
         {
-
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(lecturer);
-            }
-
-            try
-            { 
-                _lecturerRepository.AddLecturer(lecturer);
-
-                return RedirectToAction("Index");
-            }
-            catch (Exception)
-            {
-                return View(lecturer);
-            }
-        }
-        [HttpGet]
-        public IActionResult Delete(int? id)
-        {
-            if (id is null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                Lecturer? lecturer = _lecturerRepository.GetLecturerByID((int) id);
-                return View(lecturer);
-            }
-        }
-        [HttpPost]
-        public IActionResult Delete(Lecturer lecturer)
-        {
-            try
-            {
-                _lecturerRepository.DeleteLecturer(lecturer);
-
-                return RedirectToAction("Index");
-            }
-            catch (Exception)
-            {
-                return View(lecturer);
-            }
-        }
-        [HttpGet]
-        public IActionResult Edit(int? id)
-        {
-            if (id is null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                // Get student via repository
-                Lecturer? lecturer = _lecturerRepository.GetLecturerByID((int)id);
-                if (lecturer == null)
+                try
                 {
-                    return NotFound();
+                    _lecturerRepository.AddLecturer(lecturer);
+                    return RedirectToAction("Index");
                 }
-
-                return View(lecturer);
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
             }
+            return View(lecturer);
+        }
+        public IActionResult Edit(int id)
+        {
+            var lecturer = _lecturerRepository.GetLecturerByID(id);
+            if (lecturer == null) return NotFound();
+            return View(lecturer);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(Lecturer lecturer)
         {
-
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(lecturer);
-            }
-
-            try
-            {
-                
                 _lecturerRepository.UpdateLecturer(lecturer);
-
                 return RedirectToAction("Index");
             }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", $"Error updating lecturer: {ex.Message}");
-                return View(lecturer);
-            }
+            return View(lecturer);
         }
-        /*public IActionResult Index()
+        public IActionResult Delete(int id)
         {
-            return View();
+            var lecturer = _lecturerRepository.GetLecturerByID(id);
+            if (lecturer == null) return NotFound();
+            return View(lecturer);
         }
-        */
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var lecturer = _lecturerRepository.GetLecturerByID(id);
+            if (lecturer != null)
+            {
+                _lecturerRepository.DeleteLecturer(lecturer);
+            }
+            return RedirectToAction("Index");
+        }
     }
 }
