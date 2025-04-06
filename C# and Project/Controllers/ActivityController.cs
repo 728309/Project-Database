@@ -1,6 +1,7 @@
 ﻿using C__and_Project.Models;
 using C__and_Project.Repositories;
 using C__and_Project.ViewModels;
+using C__and_Project.Views.Activity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -163,6 +164,34 @@ namespace C__and_Project.Controllers
             }
 
             return RedirectToAction("ManageSupervisors", new { activityId });
+        }
+        public IActionResult ManageParticipants(int activityId)
+        {
+            var participants = _activityRepository.GetParticipantsByActivityId(activityId);
+            var nonParticipants = _activityRepository.GetAvailableStudents(activityId);
+            var activity = _activityRepository.GetActivityById(activityId);
+            var viewModel = new ManageParticipantsViewModel
+            {
+                Activity = activity,
+                Participants = participants,
+                AvailableStudents = nonParticipants
+            };
+
+            return View(viewModel);
+        }
+        public IActionResult AddSParticipant(int activityId, int studentId)
+        {
+            _activityRepository.AddStudentToActivity(activityId, studentId);
+            TempData["Message"] = "Student successfully added to the activity.";
+            return RedirectToAction("ManageParticipants", new { activityId });
+        }
+
+
+        public IActionResult RemoveStudent(int activityId, int studentId)
+        {
+            _activityRepository.RemoveStudentFromActivity(activityId, studentId);
+            TempData["Message"] = "Student successfully removed from the activity.";
+            return RedirectToAction("ManageParticipants", new { activityId });
         }
 
 

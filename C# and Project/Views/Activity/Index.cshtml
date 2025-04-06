@@ -36,6 +36,18 @@
                     </td>
                 </tr>
             }
+            @foreach (var activity in Model)
+            {
+                <tr>
+                    <td>@activity.Name</td>
+                    <td>@activity.Date.ToString("dd/MM/yyyy")</td>
+                    <td>@activity.StartTime</td>
+                    <td>
+                        <a href="@Url.Action("ManageParticipants", new { activityId = activity.ActivityID })">Manage Participants</a>
+                    </td>
+                </tr>
+            }
+
         </tbody>
     </table>
 </div>

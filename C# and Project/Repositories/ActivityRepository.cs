@@ -233,5 +233,108 @@ namespace C__and_Project.Repositories
                 }
             }
         }
+
+        public List<Student> GetParticipantsByActivityId(int activityId)
+        {
+            List<Student> students = new List<Student>();
+            string query = @"
+        SELECT s.StudentID, s.StudentNumber, s.FirstName, s.LastName, s.Room, s.Date
+        FROM Student s
+        JOIN ActivityStudent as ON s.StudentID = as.StudentID
+        WHERE as.ActivityID = @ActivityID";
+
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@ActivityID", activityId);
+                conn.Open();
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        students.Add(new Student
+                        {
+                            StudentID = Convert.ToInt32(reader["StudentID"]),
+                            StudentNumber = Convert.ToInt32(reader["StudentNumber"]),
+                            FirstName = reader["FirstName"].ToString(),
+                            LastName = reader["LastName"].ToString(),
+                            Room = Convert.ToInt32(reader["Room"]),
+                            Date = Convert.ToDateTime(reader["Date"])
+                        });
+                    }
+                }
+            }
+
+            return students;
+        }
+
+
+        public List<Student> GetAvailableStudents(int activityId)
+        {
+            List<Student> students = new List<Student>();
+            string query = @"
+        SELECT s.StudentID, s.StudentNumber, s.FirstName, s.LastName, s.Room, s.Date
+        FROM Student s
+        WHERE s.StudentID NOT IN (
+            SELECT StudentID FROM ActivityStudent WHERE ActivityID = @ActivityID
+        )";
+
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@ActivityID", activityId);
+                conn.Open();
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        students.Add(new Student
+                        {
+                            StudentID = Convert.ToInt32(reader["StudentID"]),
+                            StudentNumber = Convert.ToInt32(reader["StudentNumber"]),
+                            FirstName = reader["FirstName"].ToString(),
+                            LastName = reader["LastName"].ToString(),
+                            Room = Convert.ToInt32(reader["Room"]),
+                            Date = Convert.ToDateTime(reader["Date"])
+                        });
+                    }
+                }
+            }
+
+            return students;
+        }
+
+        public void AddStudentToActivity(int activityId, int studentId)
+        {
+            string query = "INSERT INTO ActivityStudent (ActivityID, StudentID) VALUES (@ActivityID, @StudentID)";
+
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@ActivityID", activityId);
+                cmd.Parameters.AddWithValue("@StudentID", studentId);
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void RemoveStudentFromActivity(int activityId, int studentId)
+        {
+            string query = "DELETE FROM ActivityStudent WHERE ActivityID = @ActivityID AND StudentID = @StudentID";
+
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@ActivityID", activityId);
+                cmd.Parameters.AddWithValue("@StudentID", studentId);
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+
+
     }
 }
