@@ -5,9 +5,8 @@
 }
 @model ManageParticipantsViewModel
 
-<h2>Manage Participants for Activity @Model.Activity.ActivityID</h2>
+<h2>Manage Participants</h2>
 
-<h3>Participants</h3>
 <table class="table">
     <thead>
         <tr>
@@ -46,9 +45,13 @@
                 </td>
             </tr>
         }
+
     </tbody>
 </table>
-
+<!-- Back Button -->
+<div class="mb-3">
+    <a href="@Url.Action("Index", "Activity")" class="btn btn-secondary">Back to Activities</a>
+</div>
 @if (TempData["Message"] != null)
 {
     <div class="alert alert-success">

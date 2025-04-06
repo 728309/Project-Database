@@ -238,10 +238,10 @@ namespace C__and_Project.Repositories
         {
             List<Student> students = new List<Student>();
             string query = @"
-        SELECT s.StudentID, s.StudentNumber, s.FirstName, s.LastName, s.Room, s.Date
-        FROM Student s
-        JOIN ActivityStudent as ON s.StudentID = as.StudentID
-        WHERE as.ActivityID = @ActivityID";
+                SELECT s.StudentID, s.StudentNumber, s.FirstName, s.LastName, s.Room, s.Date
+                FROM Student s
+                JOIN Particpate ON s.StudentID = Particpate.StudentID
+                WHERE Particpate.ActivityID = @ActivityID";
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -274,11 +274,11 @@ namespace C__and_Project.Repositories
         {
             List<Student> students = new List<Student>();
             string query = @"
-            SELECT s.StudentID, s.StudentNumber, s.FirstName, s.LastName, s.Room, s.Date
-            FROM Student s
-            WHERE s.StudentID NOT IN (
-                SELECT StudentID FROM ActivityStudent WHERE ActivityID = @ActivityID
-            )";
+                    SELECT s.StudentID, s.StudentNumber, s.FirstName, s.LastName, s.Room, s.Date
+                    FROM Student s
+                    WHERE s.StudentID NOT IN (
+                        SELECT StudentID FROM Particpate WHERE ActivityID = @ActivityID
+                    )";
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -308,7 +308,7 @@ namespace C__and_Project.Repositories
 
         public void AddStudentToActivity(int activityId, int studentId)
         {
-            string query = "INSERT INTO ActivityStudent (ActivityID, StudentID) VALUES (@ActivityID, @StudentID)";
+            string query = "INSERT INTO Particpate (ActivityID, StudentID) VALUES (@ActivityID, @StudentID)";
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -322,7 +322,7 @@ namespace C__and_Project.Repositories
 
         public void RemoveStudentFromActivity(int activityId, int studentId)
         {
-            string query = "DELETE FROM ActivityStudent WHERE ActivityID = @ActivityID AND StudentID = @StudentID";
+            string query = "DELETE FROM Particpate WHERE ActivityID = @ActivityID AND StudentID = @StudentID";
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             using (SqlCommand cmd = new SqlCommand(query, conn))
