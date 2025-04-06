@@ -12,5 +12,12 @@ namespace C__and_Project.Repositories
         void UpdateActivity(Activity activity);
         void DeleteActivity(int id);
         bool ActivityExists(string name);
+
+        //check
+        List<Student> GetParticipantsByActivityId(int activityId);
+        List<Student> GetAvailableStudents(int activityId);
+        void AddParticipantToActivity(int activityId, int studentId);
+        void RemoveParticipantFromActivity(int activityId, int studentId);
+
     }
 }
