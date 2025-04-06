@@ -1,7 +1,6 @@
 ﻿using C__and_Project.Models;
 using C__and_Project.Repositories;
 using C__and_Project.ViewModels;
-using C__and_Project.Views.Activity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -100,7 +99,6 @@ namespace C__and_Project.Controllers
             _activityRepository.DeleteActivity(id);
             return RedirectToAction("Index");
         }
-
         public IActionResult ManageSupervisors(int activityId)
         {
             var activity = _activityRepository.GetActivityById(activityId);
@@ -126,11 +124,6 @@ namespace C__and_Project.Controllers
 
             return View(viewModel);
         }
-
-
-
-
-
         public IActionResult AddSupervisor(int activityId, int lecturerId)
         {
             _supervisorRepository.AddSupervisorToActivity(activityId, lecturerId);
@@ -146,6 +139,15 @@ namespace C__and_Project.Controllers
             }
 
             return RedirectToAction("ManageSupervisors", new { activityId });
+        }
+
+
+        // Add a student to the activity
+        public IActionResult AddStudentToActivity(int activityId, int studentId)
+        {
+            _activityRepository.AddStudentToActivity(activityId, studentId);
+            TempData["Message"] = "Student successfully added to the activity.";
+            return RedirectToAction("ManageParticipants", new { activityId });
         }
 
 
@@ -166,6 +168,7 @@ namespace C__and_Project.Controllers
 
             return RedirectToAction("ManageSupervisors", new { activityId });
         }
+
         public IActionResult ManageParticipants(int activityId)
         {
             var participants = _activityRepository.GetParticipantsByActivityId(activityId);
@@ -180,6 +183,7 @@ namespace C__and_Project.Controllers
 
             return View(viewModel);
         }
+
         public IActionResult AddSParticipant(int activityId, int studentId)
         {
             _activityRepository.AddStudentToActivity(activityId, studentId);
@@ -188,13 +192,13 @@ namespace C__and_Project.Controllers
         }
 
 
-        public IActionResult RemoveStudent(int activityId, int studentId)
+        public IActionResult RemoveStudentFromActivity(int activityId, int studentId)
         {
             _activityRepository.RemoveStudentFromActivity(activityId, studentId);
             TempData["Message"] = "Student successfully removed from the activity.";
             return RedirectToAction("ManageParticipants", new { activityId });
         }
 
-
+        
     }
 }

@@ -5,27 +5,22 @@
 }
 @model ManageParticipantsViewModel
 
-<h2>Manage Participants for Activity @Model.ActivityId</h2>
+<h2>Manage Participants</h2>
 
-<h3>Enrolled Students</h3>
-<table>
+<table class="table">
     <thead>
         <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Room</th>
-            <th>Action</th>
+            <th>Student Name</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var student in Model.Participants)
         {
             <tr>
-                <td>@student.FirstName</td>
-                <td>@student.LastName</td>
-                <td>@student.Room</td>
+                <td>@student.FirstName @student.LastName</td>
                 <td>
-                    <a href="@Url.Action("RemoveStudent", new { activityId = Model.ActivityId, studentId = student.StudentID })">Remove</a>
+                    <a href="@Url.Action("RemoveStudentFromActivity", "Activity", new { activityId = Model.Activity.ActivityID, studentId = student.StudentID })" class="btn btn-danger">Remove</a>
                 </td>
             </tr>
         }
@@ -33,26 +28,33 @@
 </table>
 
 <h3>Available Students</h3>
-<table>
+<table class="table">
     <thead>
         <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Room</th>
-            <th>Action</th>
+            <th>Student Name</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var student in Model.AvailableStudents)
         {
             <tr>
-                <td>@student.FirstName</td>
-                <td>@student.LastName</td>
-                <td>@student.Room</td>
+                <td>@student.FirstName @student.LastName</td>
                 <td>
-                    <a href="@Url.Action("AddStudent", new { activityId = Model.ActivityId, studentId = student.StudentID })">Add</a>
+                    <a href="@Url.Action("AddStudentToActivity", "Activity", new { activityId = Model.Activity.ActivityID, studentId = student.StudentID })" class="btn btn-success">Add</a>
                 </td>
             </tr>
         }
+
     </tbody>
 </table>
+<!-- Back Button -->
+<div class="mb-3">
+    <a href="@Url.Action("Index", "Activity")" class="btn btn-secondary">Back to Activities</a>
+</div>
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}

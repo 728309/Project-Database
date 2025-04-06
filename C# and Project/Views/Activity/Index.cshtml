@@ -27,27 +27,17 @@
                 <tr>
                     <td>@activity.Name</td>
                     <td>@activity.Date.ToShortDateString()</td>
-                    <td>@activity.StartTime.ToString(@"hh\:mm")</td>  <!-- Formatting the TimeSpan -->
+                    <td>@activity.StartTime.ToString(@"hh\:mm")</td> <!-- Formatting the TimeSpan -->
                     <td>@activity.Duration</td>
                     <td>
                         <a class="btn btn-warning" href="@Url.Action("Edit", "Activity", new { id = activity.ActivityID })">Edit</a>
                         <a class="btn btn-danger" href="@Url.Action("Delete", "Activity", new { id = activity.ActivityID })">Delete</a>
                         <a class="btn btn-info" href="@Url.Action("ManageSupervisors", "Activity", new { activityId = activity.ActivityID })">Manage Supervisors</a>
+                        <!-- Manage Participants button under Actions column -->
+                        <a class="btn btn-primary" href="@Url.Action("ManageParticipants", "Activity", new { activityId = activity.ActivityID })">Manage Participants</a>
                     </td>
                 </tr>
             }
-            @foreach (var activity in Model)
-            {
-                <tr>
-                    <td>@activity.Name</td>
-                    <td>@activity.Date.ToString("dd/MM/yyyy")</td>
-                    <td>@activity.StartTime</td>
-                    <td>
-                        <a href="@Url.Action("ManageParticipants", new { activityId = activity.ActivityID })">Manage Participants</a>
-                    </td>
-                </tr>
-            }
-
         </tbody>
     </table>
 </div>
