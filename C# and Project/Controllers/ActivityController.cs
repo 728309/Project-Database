@@ -99,6 +99,47 @@ namespace C__and_Project.Controllers
             _activityRepository.DeleteActivity(id);
             return RedirectToAction("Index");
         }
+        public IActionResult ManageSupervisors(int activityId)
+        {
+            var activity = _activityRepository.GetActivityById(activityId);
+            if (activity == null)
+            {
+                return NotFound();
+            }
+
+            var allLecturers = _lecturerRepository.GetAllLecturers();
+            var supervisors = _lecturerRepository.GetSupervisorsByActivityId(activityId);
+
+            var availableLecturers = allLecturers
+                .Where(l => !supervisors.Any(s => s.LecturerID == l.LecturerID))
+                .ToList();
+
+            var viewModel = new ManageSupervisorsViewModel
+            {
+                ActivityId = activityId,
+                ActivityName = activity.Name, // ← Add this
+                Supervisors = supervisors,
+                AvailableSupervisors = availableLecturers
+            };
+
+            return View(viewModel);
+        }
+        public IActionResult AddSupervisor(int activityId, int lecturerId)
+        {
+            _supervisorRepository.AddSupervisorToActivity(activityId, lecturerId);
+
+            var lecturer = _lecturerRepository.GetLecturerByID(lecturerId);
+            if (lecturer != null)
+            {
+                TempData["Message"] = $"Successfully added supervisor: {lecturer.FirstName} (ID: {lecturer.LecturerID})";
+            }
+            else
+            {
+                TempData["Message"] = $"Successfully added supervisor with ID: {lecturerId}";
+            }
+
+            return RedirectToAction("ManageSupervisors", new { activityId });
+        }
 
 
         // Add a student to the activity
