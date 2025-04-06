@@ -156,5 +156,12 @@ namespace C__and_Project.Controllers
             TempData["Message"] = "Participant successfully added.";
             return RedirectToAction("ManageParticipants", new { activityId });
         }
+
+        public IActionResult RemoveParticipant(int activityId, int studentId)
+        {
+            _activityRepository.RemoveParticipantFromActivity(activityId, studentId);
+            TempData["Message"] = "Participant successfully removed.";
+            return RedirectToAction("ManageParticipants", new { activityId });
+        }
     }
 }
