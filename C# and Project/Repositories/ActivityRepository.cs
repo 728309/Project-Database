@@ -274,11 +274,11 @@ namespace C__and_Project.Repositories
         {
             List<Student> students = new List<Student>();
             string query = @"
-        SELECT s.StudentID, s.StudentNumber, s.FirstName, s.LastName, s.Room, s.Date
-        FROM Student s
-        WHERE s.StudentID NOT IN (
-            SELECT StudentID FROM ActivityStudent WHERE ActivityID = @ActivityID
-        )";
+            SELECT s.StudentID, s.StudentNumber, s.FirstName, s.LastName, s.Room, s.Date
+            FROM Student s
+            WHERE s.StudentID NOT IN (
+                SELECT StudentID FROM ActivityStudent WHERE ActivityID = @ActivityID
+            )";
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             using (SqlCommand cmd = new SqlCommand(query, conn))

@@ -104,7 +104,7 @@ namespace C__and_Project.Controllers
         public IActionResult ManageSupervisors(int activityId)
         {
             var allLecturers = _lecturerRepository.GetAllLecturers();
-            var supervisors = _lecturerRepository.GetSupervisorsByActivityId(activityId);
+            var supervisors = _lecturerRepository.GetSupervisorsByActivityI(activityId);
 
             var availableLecturers = allLecturers
                 .Where(l => !supervisors.Any(s => s.LecturerID == l.LecturerID))
