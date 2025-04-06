@@ -150,5 +150,11 @@ namespace C__and_Project.Controllers
 
             return View(viewModel);
         }
+        public IActionResult AddParticipant(int activityId, int studentId)
+        {
+            _activityRepository.AddParticipantToActivity(activityId, studentId);
+            TempData["Message"] = "Participant successfully added.";
+            return RedirectToAction("ManageParticipants", new { activityId });
+        }
     }
 }
