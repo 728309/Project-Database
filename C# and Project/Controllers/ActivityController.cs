@@ -141,8 +141,12 @@ namespace C__and_Project.Controllers
             var participants = _activityRepository.GetParticipantsByActivityId(activityId);
             var nonParticipants = _activityRepository.GetAvailableStudents(activityId);
             var activity = _activityRepository.GetActivityById(activityId);
-
-           
+            var viewModel = new ManageParticipantsViewModel
+            {
+                Activity = activity,
+                Participants = participants,
+                AvailableStudents = nonParticipants
+            };
 
             return View(viewModel);
         }
