@@ -2,5 +2,57 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-
 }
+@model ManageParticipantsViewModel
+
+<h2>Manage Participants for Activity @Model.ActivityId</h2>
+
+<h3>Enrolled Students</h3>
+<table>
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Room</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model.Participants)
+        {
+            <tr>
+                <td>@student.FirstName</td>
+                <td>@student.LastName</td>
+                <td>@student.Room</td>
+                <td>
+                    <a href="@Url.Action("RemoveStudent", new { activityId = Model.ActivityId, studentId = student.StudentID })">Remove</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Available Students</h3>
+<table>
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Room</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model.AvailableStudents)
+        {
+            <tr>
+                <td>@student.FirstName</td>
+                <td>@student.LastName</td>
+                <td>@student.Room</td>
+                <td>
+                    <a href="@Url.Action("AddStudent", new { activityId = Model.ActivityId, studentId = student.StudentID })">Add</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
