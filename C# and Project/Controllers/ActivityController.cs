@@ -136,6 +136,15 @@ namespace C__and_Project.Controllers
             TempData["Message"] = "Supervisor successfully removed.";
             return RedirectToAction("ManageSupervisors", new { activityId });
         }
+        public IActionResult ManageParticipants(int activityId)
+        {
+            var participants = _activityRepository.GetParticipantsByActivityId(activityId);
+            var nonParticipants = _activityRepository.GetAvailableStudents(activityId);
+            var activity = _activityRepository.GetActivityById(activityId);
 
+           
+
+            return View(viewModel);
+        }
     }
 }
