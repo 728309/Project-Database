@@ -28,7 +28,7 @@ namespace C__and_Project.Models
 
         }
 
-        public Student(int studentID,int studentnumber, int room, DateTime date,
+        public Student(int studentID, int studentnumber, int room, DateTime date,
                     string firstname, string lastname)
         {
             StudentID = studentID;

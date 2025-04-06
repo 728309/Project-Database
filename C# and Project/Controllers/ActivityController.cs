@@ -101,27 +101,17 @@ namespace C__and_Project.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult ManageSupervisors(int activityId)
+        public IActionResult ManageParticipants(int activityId)
         {
+            var participants = _activityRepository.GetParticipantsByActivityId(activityId);
+            var nonParticipants = _activityRepository.GetAvailableStudents(activityId);
             var activity = _activityRepository.GetActivityById(activityId);
-            if (activity == null)
+
+            var viewModel = new ManageParticipantsViewModel
             {
-                return NotFound();
-            }
-
-            var allLecturers = _lecturerRepository.GetAllLecturers();
-            var supervisors = _lecturerRepository.GetSupervisorsByActivityI(activityId);
-
-            var availableLecturers = allLecturers
-                .Where(l => !supervisors.Any(s => s.LecturerID == l.LecturerID))
-                .ToList();
-
-            var viewModel = new ManageSupervisorsViewModel
-            {
-                ActivityId = activityId,
-                ActivityName = activity.Name, // ← Add this
-                Supervisors = supervisors,
-                AvailableSupervisors = availableLecturers
+                Activity = activity,
+                Participants = participants,
+                AvailableStudents = nonParticipants
             };
 
             return View(viewModel);
