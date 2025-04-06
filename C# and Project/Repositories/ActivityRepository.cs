@@ -320,9 +320,9 @@ namespace C__and_Project.Repositories
             }
         }
 
-        public void RemoveParticipantFromActivity(int activityId, int studentId)
+        public void RemoveStudentFromActivity(int activityId, int studentId)
         {
-            string query = "DELETE FROM Participate WHERE ActivityID = @ActivityID AND StudentID = @StudentID";
+            string query = "DELETE FROM ActivityStudent WHERE ActivityID = @ActivityID AND StudentID = @StudentID";
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -333,6 +333,7 @@ namespace C__and_Project.Repositories
                 cmd.ExecuteNonQuery();
             }
         }
+
 
 
     }
