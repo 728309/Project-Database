@@ -1,26 +1,40 @@
-﻿using System.Numerics;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Numerics;
 
 namespace C__and_Project.Models
 {
     public class Lecturer
     {
         public int LecturerID { get; set; }
+
+        [Required]
+        public int LecturerNumber { get; set; }
+
+        [Required]
         public string FirstName { get; set; }
+
+        [Required]
         public string LastName { get; set; }
+
+        [Required]
+        public int Room { get; set; }   
         public int PhoneNumber { get; set; }
-        public string DateofBirth { get; set; }
-        //I feel like this should be DateTime but I'm not sure how to get it to work exactly yet
+
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime DateofBirth { get; set; }
         public Lecturer()
         {
 
         }
-        //I'm just adding a comment here to test out something
-        public Lecturer(int lecturerID,
-                    string firstName, string lastName, int phoneNumber, string dateofBirth)
+        public Lecturer(int lecturerID, int lecturerNumber,
+                    string firstName, string lastName, int room, int phoneNumber, DateTime dateofBirth)
         {
             LecturerID = lecturerID;
+            LecturerNumber = lecturerNumber;
             FirstName = firstName;
             LastName = lastName;
+            Room = room;
             PhoneNumber = phoneNumber;
             DateofBirth = dateofBirth;
         }

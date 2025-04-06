@@ -1,0 +1,67 @@
+﻿@model C__and_Project.ViewModels.ManageSupervisorsViewModel
+
+@{
+    ViewData["Title"] = "Manage Supervisors";
+}
+
+<h2>Manage Supervisors</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+<h4>Supervisors for Activity ID: @Model.ActivityId</h4>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Supervisors != null && Model.Supervisors.Any())
+        {
+            foreach (var supervisor in Model.Supervisors)
+            {
+                <tr>
+                    <td>@supervisor.FirstName</td>
+                    <td>@supervisor.PhoneNumber</td>
+                    <td>
+                        <form asp-action="RemoveSupervisor" method="post" style="display:inline;">
+                            <input type="hidden" name="activityId" value="@Model.ActivityId" />
+                            <input type="hidden" name="lecturerId" value="@supervisor.LecturerID" />
+                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="3">No supervisors assigned to this activity.</td></tr>
+        }
+    </tbody>
+</table>
+
+<hr />
+
+<h4>Add Supervisor</h4>
+
+<form asp-action="AddSupervisor" method="post" class="form-inline">
+    <input type="hidden" name="activityId" value="@Model.ActivityId" />
+    <div class="form-group mb-2">
+        <select name="lecturerId" class="form-control">
+            <option value="">-- Select a Lecturer --</option>
+            @foreach (var lecturer in Model.AvailableSupervisors)
+            {
+                <option value="@lecturer.LecturerID">@lecturer.FirstName (@lecturer.PhoneNumber)</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary mb-2 ml-2">Add Supervisor</button>
+</form>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Back to Activities</a>
