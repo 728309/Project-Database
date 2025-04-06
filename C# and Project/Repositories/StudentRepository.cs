@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using C__and_Project.Models;
 using System.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace C__and_Project.Repositories
 {

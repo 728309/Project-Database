@@ -17,6 +17,7 @@ namespace C__and_Project.Controllers
             _studentRepository = studentRepository;
         }
 
+
         public IActionResult Index()
         {
             return PlaceOrder();
@@ -30,6 +31,26 @@ namespace C__and_Project.Controllers
                 Students = _studentRepository.GetAllStudents(),
                 Drinks = _drinkRepository.GetAllDrinks()
             };
+
+            foreach (var order in viewModel.Orders)
+            {
+                var student = viewModel.Students.FirstOrDefault(s => s.StudentID== order.StudentId);
+                var drink = viewModel.Drinks.FirstOrDefault(d => d.DrinkID == order.DrinkId);
+
+                if (student != null && drink != null)
+                {
+                    viewModel.DisplayOrders.Add(new OrderDisplay
+                    {
+                        StudentFullName = student.FirstName + " " + student.LastName,
+                        DrinkName = drink.DrinkName,
+                        Amount = order.Amount,
+                        StudentId = order.StudentId,
+                        DrinkId = order.DrinkId
+
+                    });
+                }
+            }
+
             return View(viewModel);
         }
 
@@ -38,6 +59,15 @@ namespace C__and_Project.Controllers
         {
             try
             {
+                var student = _studentRepository.GetStudentByID(StudentId);
+                var drink = _drinkRepository.GetDrinksByID(DrinkId);
+
+                if (drink == null || student == null)
+                {
+                    TempData["ErrorMessage"] = "Invalid student or drink.";
+                    return RedirectToAction("Index");
+                }
+
                 Order order = new Order
                 {
                     StudentId = StudentId,
@@ -97,7 +127,5 @@ namespace C__and_Project.Controllers
             }
             return RedirectToAction("Index");
         }
-
-
     }
 }

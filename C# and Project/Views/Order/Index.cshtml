@@ -43,9 +43,9 @@
         cursor: pointer;
     }
 
-    button:hover {
-        background-color: #2980b9;
-    }
+        button:hover {
+            background-color: #2980b9;
+        }
 
     table {
         width: 100%;
@@ -63,6 +63,22 @@
         background-color: #ecf0f1;
     }
 
+    .btn {
+        padding: 5px 10px;
+        margin: 0 5px;
+        text-decoration: none;
+        color: white;
+        border-radius: 3px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+    }
+
     a {
         display: inline-block;
         margin-top: 20px;
@@ -71,9 +87,9 @@
         font-weight: bold;
     }
 
-    a:hover {
-        text-decoration: underline;
-    }
+        a:hover {
+            text-decoration: underline;
+        }
 </style>
 
 <h2>Place Order</h2>
@@ -86,6 +102,19 @@
             <option value="@student.StudentID">@student.FirstName @student.LastName</option>
         }
     </select>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div style="color: green; font-weight: bold;">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div style="color: red; font-weight: bold;">
+            @TempData["ErrorMessage"]
+        </div>
+    }
 
     <label for="Drink">Drink:</label>
     <select id="Drink" name="DrinkId">
@@ -105,26 +134,22 @@
 <table>
     <thead>
         <tr>
-            <th>Student</th>
-            <th>Drink</th>
+            <th>Student Name</th>
+            <th>Drink Name</th>
             <th>Amount</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var order in Model.Orders)
+        @foreach (var order in Model.DisplayOrders)
         {
             <tr>
-                <td>@order.StudentId</td>
-                <td>@order.DrinkId</td>
+                <td>@order.StudentFullName</td>
+                <td>@order.DrinkName</td>
                 <td>@order.Amount</td>
                 <td>
-                <td>
-                    <a href="@Url.Action("Edit", "Order", new { studentId = order.StudentId, drinkId = order.DrinkId })" class="btn btn-primary">Edit</a>
-                    |
-                    <a href="@Url.Action("Delete", "Order", new { studentId = order.StudentId, drinkId = order.DrinkId })" class="btn btn-danger" style="margin-left: 10px;">Delete</a>
-                </td>
-
+                    <a href="@Url.Action("Edit", new { studentId = order.StudentId, drinkId = order.DrinkId })" class="btn btn-primary">Edit</a>
+                    <a href="@Url.Action("Delete", new { studentId = order.StudentId, drinkId = order.DrinkId })" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         }
