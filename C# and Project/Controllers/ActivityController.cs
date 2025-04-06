@@ -130,6 +130,7 @@ namespace C__and_Project.Controllers
 
 
 
+
         public IActionResult AddSupervisor(int activityId, int lecturerId)
         {
             _supervisorRepository.AddSupervisorToActivity(activityId, lecturerId);
