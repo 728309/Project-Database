@@ -101,25 +101,6 @@ namespace C__and_Project.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult ManageParticipants(int activityId)
-        {
-            var participants = _activityRepository.GetParticipantsByActivityId(activityId);
-            var nonParticipants = _activityRepository.GetAvailableStudents(activityId);
-            var activity = _activityRepository.GetActivityById(activityId);
-
-            var viewModel = new ManageParticipantsViewModel
-            {
-                Activity = activity,
-                Participants = participants,
-                AvailableStudents = nonParticipants
-            };
-
-            return View(viewModel);
-        }
-
-
-
-
 
         // Add a student to the activity
         public IActionResult AddStudentToActivity(int activityId, int studentId)
@@ -148,7 +129,6 @@ namespace C__and_Project.Controllers
             return RedirectToAction("ManageSupervisors", new { activityId });
         }
 
-
         public IActionResult ManageParticipants(int activityId)
         {
             var participants = _activityRepository.GetParticipantsByActivityId(activityId);
@@ -163,6 +143,7 @@ namespace C__and_Project.Controllers
 
             return View(viewModel);
         }
+
         public IActionResult AddSParticipant(int activityId, int studentId)
         {
             _activityRepository.AddStudentToActivity(activityId, studentId);
@@ -171,13 +152,13 @@ namespace C__and_Project.Controllers
         }
 
 
-        public IActionResult RemoveStudent(int activityId, int studentId)
+        public IActionResult RemoveStudentFromActivity(int activityId, int studentId)
         {
             _activityRepository.RemoveStudentFromActivity(activityId, studentId);
             TempData["Message"] = "Student successfully removed from the activity.";
             return RedirectToAction("ManageParticipants", new { activityId });
         }
 
-
+        // Other existing actions (Create, Edit, Delete) remain unchanged...
     }
 }
