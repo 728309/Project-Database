@@ -2,7 +2,7 @@
 
 namespace C__and_Project.Views.Activity
 {
-    public class ManageParticipants
+    public class ManageParticipantsViewModel
     {
         public Activity Activity { get; set; }
         public List<Student> Participants { get; set; }

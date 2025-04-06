@@ -1,6 +1,7 @@
 ﻿using C__and_Project.Models;
 using C__and_Project.Repositories;
 using C__and_Project.ViewModels;
+using C__and_Project.Views.Activity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
