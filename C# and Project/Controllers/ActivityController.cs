@@ -159,11 +159,12 @@ namespace C__and_Project.Controllers
         }
 
 
-        public IActionResult RemoveParticipant(int activityId, int studentId)
+        public IActionResult RemoveStudent(int activityId, int studentId)
         {
-            _activityRepository.RemoveParticipantFromActivity(activityId, studentId);
-            TempData["Message"] = "Participant successfully removed.";
+            _activityRepository.RemoveStudentFromActivity(activityId, studentId);
+            TempData["Message"] = "Student successfully removed from the activity.";
             return RedirectToAction("ManageParticipants", new { activityId });
         }
+
     }
 }
