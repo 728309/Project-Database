@@ -59,29 +59,13 @@ namespace C__and_Project.Repositories
 
         public void AddRoom(Room room)
         {
-            string checkquery = "SELECT COUNT(*) FROM Room WHERE roomID = @roomID";
-
-            string query = "INSERT INTO Room( roomID, typeRoom, capacity, roomNumber) " +
-                           "VALUES (@roomID, @typeRoom, @capacity, @roomNumber);" +
-                           "SELECT SCOPE_IDENTITY();";
+            string query = "INSERT INTO Room (RoomID, TypeRoom, Capacity, RoomNumber) VALUES (@roomID, @typeRoom, @capacity, @roomNumber)";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
-
-                using (SqlCommand Checkcommand = new SqlCommand(checkquery, connection))
-                {
-                    Checkcommand.Parameters.AddWithValue("@roomID", room.RoomID);
-                    int count = (int)Checkcommand.ExecuteScalar();
-
-                    if (count > 0)
-                    {
-                        throw new Exception("The room is unavailble.");
-                    }
-                }
-
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
+                    command.Parameters.AddWithValue("@roomID", room.RoomID);
                     command.Parameters.AddWithValue("@typeRoom", room.TypeRoom);
                     command.Parameters.AddWithValue("@capacity", room.Capacity);
                     command.Parameters.AddWithValue("@roomNumber", room.RoomNumber);
@@ -161,10 +145,10 @@ namespace C__and_Project.Repositories
                         {
                             return new Room
                             {
-                                RoomID = Convert.ToInt32(reader["RoomID"]),
-                                TypeRoom = reader["RoomType"].ToString(),
-                                Capacity = Convert.ToInt32(reader["RoomID"]),
-                                RoomNumber = reader["RoomNumber"].ToString()
+                                RoomID = Convert.ToInt32(reader["roomID"]),
+                                TypeRoom = reader["typeRoom"].ToString(),
+                                Capacity = Convert.ToInt32(reader["roomID"]),
+                                RoomNumber = reader["roomNumber"].ToString()
                             };
                         }
                     }
