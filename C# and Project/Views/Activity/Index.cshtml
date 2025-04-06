@@ -47,6 +47,17 @@
                     </td>
                 </tr>
             }
+            @foreach (var activity in Model)
+            {
+                <tr>
+                    <td>@activity.Name</td>
+                    <td>@activity.Date</td>
+                    <td>
+                        <a href="@Url.Action("ManageParticipants", "Activity", new { activityId = activity.ActivityID })" class="btn btn-primary">Manage Participants</a>
+                    </td>
+                </tr>
+            }
+
 
         </tbody>
     </table>
